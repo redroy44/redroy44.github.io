@@ -2,6 +2,7 @@
 menu:
   Home: /
   Archives: /archives
+  About: /about
   Github:
     url: https://github.com/redroy44/redroy44.github.io
     icon: github
@@ -38,7 +39,7 @@ favicon:
 twitter_url:
 twitter_handle:
 facebook_url:
-github_url: https://github.com/redroy44/redroy44.github.io
+github_url: https://github.com/redroy44/
 gitlab_url:
-linkedin_url:
-mailto:
+linkedin_url: https://pl.linkedin.com/in/piotr-bandurski
+mailto: bandurski.piotr@gmail.com
