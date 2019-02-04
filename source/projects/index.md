@@ -1,6 +1,7 @@
 ---
 title: Projects
 meta: false
+actions: false
 comments: false
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: About
 meta: false
+actions: false
 comments: false
 ---
 
