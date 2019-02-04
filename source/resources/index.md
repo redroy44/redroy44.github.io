@@ -1,5 +1,6 @@
 ---
 title: Resources
+meta: false
 ---
 
 Here is a list of DS & ML resources that I found interesting enough to

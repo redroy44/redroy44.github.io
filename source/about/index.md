@@ -1,6 +1,7 @@
 ---
 title: About
-comment: false
+meta: false
+comments: false
 ---
 
-It's empty... for now.
+I'm a Machine Learning Specialist in strong background in big data frameworks including Apache Spark. I'm also interested in the productization process of ML models.
