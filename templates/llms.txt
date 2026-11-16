@@ -1,0 +1,29 @@
+{#- llms.txt (https://llmstxt.org): a Markdown index of the site for AI agents.
+    Zola renders it as a feed because zola.toml lists it in feed_filenames. -#}
+{%- set r = load_data(path="data/resume.toml") -%}
+{%- set projects = load_data(path="data/projects.toml") -%}
+# {{ config.title }}
+
+> {{ r.headline }}. {{ config.extra.location }}.
+
+{{ r.summary }}
+
+## Pages
+
+- [Home]({{ get_url(path="/", trailing_slash=true) }})
+{% for item in config.extra.nav %}- [{{ item.name }}]({{ get_url(path=item.path, trailing_slash=true) }})
+{% endfor %}- [Atom feed]({{ get_url(path="atom.xml") }})
+
+## Posts
+
+{% for p in pages %}- [{{ p.title }}]({{ p.permalink }}) ({{ p.date | date(format="%Y-%m-%d") }}){% if p.description %}: {{ p.description }}{% endif %}
+{% endfor %}
+## Projects
+
+{% for p in projects.projects %}- [{{ p.name }}]({{ p.url }}): {{ p.description }}
+{% endfor %}
+## Contact
+
+{% if config.extra.github_url %}- [GitHub]({{ config.extra.github_url }})
+{% endif %}{% if config.extra.linkedin_url %}- [LinkedIn]({{ config.extra.linkedin_url }})
+{% endif %}

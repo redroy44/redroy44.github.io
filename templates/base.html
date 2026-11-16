@@ -39,7 +39,9 @@
   {% endif %}
 
   <link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ get_url(path='atom.xml') | safe }}">
+  <link rel="alternate" type="text/markdown" title="llms.txt" href="{{ get_url(path='llms.txt') | safe }}">
   {% block feeds %}{% endblock feeds %}
+  {% block jsonld %}{% endblock jsonld %}
 
   <link rel="icon" href="{{ get_url(path='favicon.svg') | safe }}" type="image/svg+xml">
   <link rel="preload" href="{{ get_url(path='fonts/source-serif-4-latin-wght-normal.woff2') | safe }}" as="font" type="font/woff2" crossorigin>
