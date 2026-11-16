@@ -7,6 +7,12 @@ version = "0.23.6"
 backend = "aqua:getzola/zola"
 specifiers = ["0.23.6"]
 
+[tools.zola."platforms.linux-x64"]
+checksum = "sha256:8f5132b3522412d04e395e0b25f6d68613ad272a873e54a2b3ebf664873024a4"
+url = "https://github.com/getzola/zola/releases/download/v0.23.6/zola-v0.23.6-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/getzola/zola/releases/assets/560029419"
+provenance = "github-attestations"
+
 [tools.zola."platforms.macos-arm64"]
 checksum = "sha256:cbffbd29b3f59c3f52633507c8cb945a7a02d8b1399b43b235f5932912297aa3"
 url = "https://github.com/getzola/zola/releases/download/v0.23.6/zola-v0.23.6-aarch64-apple-darwin.tar.gz"
