@@ -9,9 +9,9 @@
 # are shortened so the page prints on two sheets; the full text is on LinkedIn.
 
 name = "Piotr Bandurski"
-headline = "AI Engineer"
+headline = "Software Engineer: AI agents and distributed systems"
 location = "Wrocław, Poland"
-summary = "I'm a passionate computer science engineer with a broad knowledge spanning the whole modern data stack - from Big Data systems to Deep Learning solutions. I'm dedicated to expand my career further in this direction."
+summary = "Software engineer with more than ten years of production experience, from Big Data platforms and event-driven Scala services to AI agents in Rust. I build backend systems end to end, from design and code to deployment and monitoring, and I enjoy leading the technical direction of a team."
 
 # --- Skills: one block per group --------------------------------------------
 
@@ -42,16 +42,18 @@ role = "AI Engineer"
 company = "Scalac"
 start = "Jan 2026"
 end = "Present"
-summary = "Building an AI-powered Recruiter Sourcing Copilot for a global HR technology company."
+summary = "Building an AI assistant that helps recruiters find and contact candidates."
 highlights = [
-  "Designed and implemented the core AI Copilot agent backend in Rust: agentic tool-use loop, multi-turn conversation state, PostgreSQL persistence",
-  "Prototyped a2ui (Agent-to-UI), a pattern enabling the LLM to dynamically render rich workspaces, custom components, and interactive surfaces inside a chat interface",
+  "Designed and implemented the core agent backend in Rust: agentic tool-use loop, multi-turn conversation state, PostgreSQL persistence",
+  "Made large result tables appear in milliseconds instead of seconds: the agent sends tables as structured data instead of having the LLM write them out token by token",
+  "Connected the assistant to a second, independent AI agent over the A2A (Agent-to-Agent) protocol, including a shared contract and live progress updates",
+  "Delivered agent features from design to production, such as sending outreach messages to candidates",
+  "Prototyped Agent-to-UI (A2UI) rendering, which lets the LLM build interactive views and custom components inside a chat interface",
+  "Built evaluation tooling for a non-deterministic agent: repeated A/B runs that measure the effect of a prompt or tool change, and a Rust proxy that runs the agent against a sandbox system",
   "Implemented distributed tracing (OpenTelemetry) and LLM observability (MLflow GenAI traces) across the full agent stack",
-  "Built a Rust proxy service for sandboxed agent evaluation with JSON-RPC routing and Helm-based deployment",
-  "Provisioned and migrated cloud infrastructure (Terraform/HCL) across multiple repos: managed Postgres, ECS services, ArgoCD apps",
-  "Contributed TypeScript frontend components, prompt engineering, and architecture documentation",
+  "Used a spec-driven development workflow in which several AI coding agents implement and review each change",
 ]
-stack = ["Rust", "TypeScript", "Python", "Terraform", "PostgreSQL", "OpenTelemetry", "MLflow", "OpenAI APIs", "Docker", "Helm", "ArgoCD", "AWS", "GitHub Actions"]
+stack = ["Rust", "TypeScript", "Python", "Terraform", "PostgreSQL", "A2A", "MCP", "OpenTelemetry", "MLflow", "OpenAI APIs", "Docker", "Helm", "ArgoCD", "AWS", "GitHub Actions"]
 
 [[experience]]
 role = "Senior Scala Engineer"
@@ -61,13 +63,16 @@ start = "Apr 2023"
 end = "Dec 2025"
 summary = "Contributing to a modern, scalable recruiting and referral platform for a global HR technology company."
 highlights = [
-  "Architecting and implementing distributed event-driven microservices for candidate management, referrals, gamification, and rewards",
-  "Designing RESTful APIs and integrating with Kafka-based messaging for robust, scalable interactions",
-  "Leveraging Scala 3 and Cats Effect for pure functional programming, resource safety, and concurrency",
-  "Building and maintaining automated CI/CD pipelines, cloud infrastructure (AWS, Terraform, CloudFormation), and deployment workflows",
-  "Implementing advanced monitoring and tracing (OpenTelemetry, DataDog) for production visibility and reliability",
+  "Acted as technical lead of a six-engineer team: set technical direction, reviewed most of the team's code and planned releases",
+  "Led a referral-link feature that spans three services, from design to a production launch without incidents",
+  "Set the Scala 3 stack and coding standards for the team's first two services (Cats Effect, Tapir, Doobie, hexagonal architecture); both are still in production",
+  "Built event-driven microservices with Kafka, including read models in PostgreSQL that are built from Kafka events",
+  "Traced a long-standing image-quality bug across four legacy services and shipped the fix with a safe data-migration and rollout plan",
+  "Mentored a junior engineer to independent work across services through gradual delegation and paired production deployments",
+  "Started the team's practice of architecture decision records (ADRs) and wrote shared Kafka guidance: an incident runbook and consumer benchmarks",
+  "Maintained CI/CD pipelines, cloud infrastructure (AWS, Terraform) and production monitoring (OpenTelemetry, DataDog)",
 ]
-stack = ["Scala 3", "Cats Effect", "Akka", "Kafka", "FS2", "Protobuf", "OpenTelemetry", "AWS (ECS, Lambda, S3)", "Terraform", "PostgreSQL", "http4s", "DataDog"]
+stack = ["Scala 3", "Cats Effect", "Tapir", "Doobie", "Akka", "Kafka", "FS2", "Protobuf", "OpenTelemetry", "AWS (ECS, Lambda, S3)", "Terraform", "PostgreSQL", "http4s", "DataDog"]
 
 [[experience]]
 role = "Scala/Data Engineer"
