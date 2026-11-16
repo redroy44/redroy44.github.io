@@ -1,7 +1,7 @@
 +++
 title = "Blog"
-# PLACEHOLDER: one line describing what you write about.
-description = "PLACEHOLDER: what this blog covers."
+# Optional: add `description = "..."` for a line about what you write about; it is shown
+# under the page title.
 sort_by = "date"
 template = "section.html"
 page_template = "post.html"

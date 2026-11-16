@@ -31,27 +31,16 @@ You can skip mise. Install Zola 0.23.6 yourself and run `zola serve` or `zola bu
 
 ## First things to edit
 
-Everything that still needs your input is marked `PLACEHOLDER`. Work through this list:
+The site text was filled in from the old site and a LinkedIn profile export, so nothing says `PLACEHOLDER` any more. It is a starting point; review and rewrite it:
 
-- [ ] `zola.toml`
-  - [ ] `description` (name, GitHub and LinkedIn links are already filled in from the old site)
-  - [ ] `[extra]`: `email` (empty for now, so it is hidden), `role`, `location`, `twitter_handle`
-  - [ ] `[extra]`: `author_bio` and `author_cta`, the box shown at the end of every post
+- [ ] `zola.toml`: `description`, and under `[extra]` `role`, `author_bio`, `author_cta`. `email` is empty, so no email link is shown; add an address only if you want it public.
 - [ ] `content/_index.md`: the home intro and "What I work on"
-- [ ] `content/blog/_index.md` and `content/projects.md`: the `description` in each
-- [ ] `data/resume.toml`: see [Editing the resume](#editing-the-resume)
-- [ ] `data/projects.toml`: see [Projects](#projects)
+- [ ] `content/blog/_index.md` and `content/projects.md`: optionally add a `description` line
+- [ ] `data/resume.toml`: see [Editing the resume](#editing-the-resume). Older roles are shortened to fit two printed pages.
+- [ ] `data/projects.toml`: see [Projects](#projects). It lists two old projects; add current work.
 - [ ] `static/img/og-default.png`: the fallback link-preview image, 1200x630 PNG. It is only used when the generated images are missing.
 - [ ] `static/favicon.svg`
 - [ ] Delete `content/blog/2026-01-01-styling-sample.md` and `static/img/sample-diagram.svg` once you have checked the styling. The sample post is a draft, so it is not published; see it with `mise run drafts`.
-
-To see what is left, run:
-
-```sh
-grep -rn PLACEHOLDER .
-```
-
-Leave `email`, `github_url`, `linkedin_url` or `twitter_handle` as an empty string to hide it.
 
 ## Writing a post
 
@@ -184,7 +173,7 @@ Deleting a section removes it from the page. Entries appear in the order they ar
 2. Print, then choose Save as PDF.
 3. Turn off the browser's "headers and footers" option for a clean page.
 
-The site header, footer and the hint line are hidden in print. The placeholder data prints on one A4 page.
+The site header, footer and the hint line are hidden in print. The current data prints on two A4 pages; if you add entries, check the page count.
 
 ## Projects
 

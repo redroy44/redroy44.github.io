@@ -51,9 +51,8 @@
     <div class="entry">
       <div class="entry-head">
         <h3>{{ job.role }} <span class="org">· {% if job.url is defined %}<a href="{{ job.url | safe }}">{{ job.company }}</a>{% else %}{{ job.company }}{% endif %}</span></h3>
-        <p class="dates">{{ job.start }} – {{ job.end }}</p>
+        <p class="dates">{% if job.location is defined %}{{ job.location }} · {% endif %}{{ job.start }} – {{ job.end }}</p>
       </div>
-      {% if job.location is defined %}<p class="entry-sub">{{ job.location }}</p>{% endif %}
       {% if job.summary is defined %}<p>{{ job.summary }}</p>{% endif %}
       {% if job.highlights is defined %}
       <ul>
