@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+{%- set blog = get_section(path="blog/_index.md") -%}
+<section class="intro">
+  <h1>{{ config.title }}</h1>
+  <p class="role">{{ config.extra.role }}{% if config.extra.location %} · {{ config.extra.location }}{% endif %}</p>
+  {#- The intro and "what I work on" text comes from content/_index.md. -#}
+  <div class="prose">{{ section.content | safe }}</div>
+  <ul class="contact">
+    {% if config.extra.github_url %}<li><a href="{{ config.extra.github_url | safe }}" rel="me">GitHub</a></li>{% endif %}
+    {% if config.extra.linkedin_url %}<li><a href="{{ config.extra.linkedin_url | safe }}" rel="me">LinkedIn</a></li>{% endif %}
+    {% if config.extra.email %}<li><a href="mailto:{{ config.extra.email }}">{{ config.extra.email }}</a></li>{% endif %}
+  </ul>
+</section>
+
+<section aria-labelledby="latest">
+  <h2 id="latest" class="label">Latest posts</h2>
+  {% set posts = blog.pages[:config.extra.home_post_count] %}
+  {% if posts %}
+  {% include "partials/post-list.html" %}
+  <p class="more"><a href="{{ blog.permalink | safe }}">All posts →</a></p>
+  {% else %}
+  <p>No posts yet.</p>
+  {% endif %}
+</section>
+{% endblock content %}

@@ -1,0 +1,91 @@
+# Site configuration. Everything marked PLACEHOLDER is yours to replace.
+# Reference: https://www.getzola.org/documentation/getting-started/configuration/
+
+# The site's address, https, no trailing slash. To move to a custom domain run
+# `mise run set-domain yourdomain.tld`; it changes this line and writes static/CNAME.
+base_url = "https://redroy44.github.io"
+
+# Your name. Shown in the header, page titles and the feed.
+title = "Piotr Bandurski"
+
+# PLACEHOLDER: one sentence saying what you do. Used as the default meta
+# description and in link previews, so write it for someone who has ten seconds.
+description = "PLACEHOLDER: one sentence about what you do."
+
+default_language = "en"
+
+# Your name again; this is the author written into the feed.
+author = "Piotr Bandurski"
+
+generate_feeds = true
+feed_filenames = ["atom.xml"]
+generate_sitemap = true
+generate_robots_txt = true
+minify_html = false
+
+taxonomies = [{ name = "tags", feed = true }]
+
+# Zola 0.23 runs Markdown through the template engine first, so `{{`, `{%` and
+# `{#` in a post would be read as template syntax. Rust format strings and
+# Python f-strings are full of those, so templating is switched off for all
+# content. Remove this line if you ever want to use components inside posts.
+skip_content_templating = ["**/*.md"]
+
+[markdown]
+smart_punctuation = true
+bottom_footnotes = true
+lazy_async_image = true
+insert_anchor_links = "heading"
+external_links_target_blank = false
+external_links_no_referrer = false
+
+[markdown.highlighting]
+# A post with a misspelt language tag fails the build instead of silently
+# rendering unhighlighted.
+error_on_missing_language = true
+# "class" writes giallo-light.css and giallo-dark.css into the output; base.html
+# loads whichever matches the reader's system setting.
+style = "class"
+light_theme = "github-light-default"
+dark_theme = "github-dark-default"
+
+[link_checker]
+internal_level = "error"
+external_level = "warn"
+
+[extra]
+# Contact details, shown on the home page, footer, author box and resume.
+# Leave any of them as an empty string to hide it. `email` is empty for now:
+# this repository is public, so add an address only if you want it public.
+github_url = "https://github.com/redroy44"
+linkedin_url = "https://www.linkedin.com/in/piotr-bandurski/"
+email = ""
+
+# PLACEHOLDER: a short role line shown under your name on the home page.
+role = "PLACEHOLDER: role, e.g. Software engineer"
+location = "Wrocław, Poland"
+
+# PLACEHOLDER: the box at the end of every post. `author_bio` is one or two
+# sentences on what you do. `author_cta` is an optional line saying what you
+# are open to (hiring, consulting, talks); leave it empty to hide it.
+author_bio = "PLACEHOLDER: one or two sentences about what you do."
+author_cta = "PLACEHOLDER: what you are open to, or leave empty."
+
+# How many posts the home page lists.
+home_post_count = 5
+
+# Fallback link-preview image. `mise run og` (part of `mise run build`)
+# generates a card per post and one for the site in static/img/og/; this file
+# is used only when those have not been generated. A post can also set its own
+# image with `extra.image` in its front matter.
+og_image = "img/og-default.png"
+
+# Optional: "@handle" for the twitter:site / twitter:creator tags.
+twitter_handle = ""
+
+# Top navigation, in order.
+nav = [
+  { name = "Blog", path = "/blog/" },
+  { name = "Projects", path = "/projects/" },
+  { name = "Resume", path = "/resume/" },
+]

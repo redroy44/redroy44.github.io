@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+
+  {#- Each child template sets these four values; everything in <head> derives from them. -#}
+  {%- set meta_title = config.title -%}
+  {%- set meta_description = config.description -%}
+  {%- set meta_type = "website" -%}
+  {%- set meta_image = config.extra.og_image -%}
+  {#- `mise run og` generates a card for the site; use it when it exists. -#}
+  {%- if get_image_metadata(path="img/og/site.png", allow_missing=true) %}{% set meta_image = "img/og/site.png" %}{% endif -%}
+  {%- block meta %}{% endblock meta -%}
+
+  {%- if current_url is defined %}{% set canonical = current_url %}{% else %}{% set canonical = "" %}{% endif %}
+
+  <title>{% if meta_title == config.title %}{{ config.title }}{% else %}{{ meta_title }} · {{ config.title }}{% endif %}</title>
+  <meta name="description" content="{{ meta_description }}">
+  <meta name="author" content="{{ config.author }}">
+  {% if canonical %}<link rel="canonical" href="{{ canonical | safe }}">{% endif %}
+
+  <meta property="og:site_name" content="{{ config.title }}">
+  <meta property="og:title" content="{{ meta_title }}">
+  <meta property="og:description" content="{{ meta_description }}">
+  <meta property="og:type" content="{{ meta_type }}">
+  {% if canonical %}<meta property="og:url" content="{{ canonical | safe }}">{% endif %}
+  <meta property="og:image" content="{{ get_url(path=meta_image) | safe }}">
+  <meta property="og:locale" content="en_GB">
+  {% block meta_extra %}{% endblock meta_extra %}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ meta_title }}">
+  <meta name="twitter:description" content="{{ meta_description }}">
+  <meta name="twitter:image" content="{{ get_url(path=meta_image) | safe }}">
+  {% if config.extra.twitter_handle %}
+  <meta name="twitter:site" content="{{ config.extra.twitter_handle }}">
+  <meta name="twitter:creator" content="{{ config.extra.twitter_handle }}">
+  {% endif %}
+
+  <link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ get_url(path='atom.xml') | safe }}">
+  {% block feeds %}{% endblock feeds %}
+
+  <link rel="icon" href="{{ get_url(path='favicon.svg') | safe }}" type="image/svg+xml">
+  <link rel="preload" href="{{ get_url(path='fonts/source-serif-4-latin-wght-normal.woff2') | safe }}" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{{ get_url(path='css/style.css', cachebust=true) | safe }}">
+  {#- Syntax colours: Zola writes these two files at build time (see zola.toml). -#}
+  <link id="code-light" rel="stylesheet" href="{{ get_url(path='giallo-light.css') | safe }}" media="(prefers-color-scheme: light)">
+  <link id="code-dark" rel="stylesheet" href="{{ get_url(path='giallo-dark.css') | safe }}" media="(prefers-color-scheme: dark)">
+  {#- If the reader picked a theme with the header switch, apply it before the
+      page is drawn so there is no flash. Without JavaScript the site simply
+      follows the system setting. -#}
+  <script>
+    try {
+      var t = localStorage.getItem("theme");
+      if (t === "light" || t === "dark") {
+        document.documentElement.dataset.theme = t;
+        document.getElementById("code-light").media = t === "light" ? "all" : "not all";
+        document.getElementById("code-dark").media = t === "dark" ? "all" : "not all";
+      }
+    } catch (e) {}
+  </script>
+  <script src="{{ get_url(path='js/site.js', cachebust=true) | safe }}" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="site-name" href="{{ get_url(path='/', trailing_slash=true) | safe }}">{{ config.title }}</a>
+      <nav aria-label="Main">
+        <ul>
+          {% for item in config.extra.nav %}
+          <li><a href="{{ get_url(path=item.path, trailing_slash=true) | safe }}"{% if current_path is defined and current_path is starting_with(pat=item.path) %} aria-current="page"{% endif %}>{{ item.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </nav>
+      {#- Shown by static/js/site.js; stays hidden when JavaScript is off. -#}
+      <button id="theme-toggle" class="theme-toggle" type="button" hidden>
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    {% block content %}{% endblock content %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© {{ now() | date(format="%Y") }} {{ config.author }}</p>
+      <ul>
+        {% if config.extra.github_url %}<li><a href="{{ config.extra.github_url | safe }}" rel="me">GitHub</a></li>{% endif %}
+        {% if config.extra.linkedin_url %}<li><a href="{{ config.extra.linkedin_url | safe }}" rel="me">LinkedIn</a></li>{% endif %}
+        {% if config.extra.email %}<li><a href="mailto:{{ config.extra.email }}">Email</a></li>{% endif %}
+        <li><a href="{{ get_url(path='atom.xml') | safe }}">Feed</a></li>
+      </ul>
+    </div>
+  </footer>
+</body>
+</html>

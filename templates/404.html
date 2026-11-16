@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block meta %}
+{%- set meta_title = "Page not found" -%}
+{% endblock meta %}
+
+{% block meta_extra %}<meta name="robots" content="noindex">{% endblock meta_extra %}
+
+{% block content %}
+<section class="not-found">
+  <p class="label">404</p>
+  <h1>Page not found</h1>
+  <p>Nothing lives at this address. It may have moved, or the link may be wrong.</p>
+  <p><a href="{{ get_url(path='/', trailing_slash=true) | safe }}">Home</a> · <a href="{{ get_url(path='blog') | safe }}/">Blog</a></p>
+</section>
+{% endblock content %}

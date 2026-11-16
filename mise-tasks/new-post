@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+#MISE description="Create a draft post: mise run new-post \"Post title\""
+set -euo pipefail
+
+title="${1:-}"
+if [ -z "$title" ]; then
+  echo "usage: mise run new-post \"Post title\"" >&2
+  exit 1
+fi
+
+# "Hello, World!" -> "hello-world"
+slug=$(printf '%s' "$title" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g')
+if [ -z "$slug" ]; then
+  echo "could not derive a file name from that title; use some ASCII letters or digits" >&2
+  exit 1
+fi
+
+date=$(date +%Y-%m-%d)
+file="content/blog/${date}-${slug}.md"
+if [ -e "$file" ]; then
+  echo "$file already exists" >&2
+  exit 1
+fi
+
+# TOML basic strings need backslashes and double quotes escaped.
+toml_title=$(printf '%s' "$title" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g')
+
+cat > "$file" <<POST
++++
+title = "${toml_title}"
+description = ""
+date = ${date}
+draft = true
+
+[taxonomies]
+tags = []
++++
+
+Opening paragraph. Everything above the marker below is the post summary.
+
+<!-- more -->
+
+POST
+
+echo "created $file (draft: preview with 'mise run drafts', publish by removing 'draft = true')"

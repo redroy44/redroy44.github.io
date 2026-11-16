@@ -1,0 +1,36 @@
+# Tool versions and common tasks. Run `mise install` once, then `mise tasks`
+# to list everything below. CI uses this same file, so the Zola version here
+# is the one that builds the live site.
+
+[tools]
+zola = "0.23.6"
+
+[tasks.serve]
+description = "Serve the site at http://127.0.0.1:1111 with live reload"
+run = "zola serve"
+
+[tasks.drafts]
+description = "Like serve, but also shows posts marked draft = true"
+run = "zola serve --drafts"
+
+[tasks.build]
+description = "Generate link-preview images, then build the site into public/"
+depends = ["og"]
+run = "zola build"
+
+[tasks.check]
+description = "Check links: broken internal links fail, broken external links warn"
+run = "zola check"
+
+[tasks.validate]
+description = "Validate the HTML of the built site (needs Node.js; run build first)"
+run = "npx --yes html-validate@11.21.1 'public/**/*.html'"
+
+[tasks.clean]
+description = "Delete the build output"
+run = "rm -rf public"
+
+# More tasks live as scripts in mise-tasks/:
+#   mise run new-post "Post title"     create a dated draft post
+#   mise run set-domain example.org    set base_url and static/CNAME
+#   mise run og                        generate link-preview images

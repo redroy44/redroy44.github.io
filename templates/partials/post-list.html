@@ -1,0 +1,19 @@
+{#- Renders `posts` (an array of pages) as a dated list. Set `posts` before including. -#}
+<ol class="post-list">
+  {% for post in posts %}
+  <li>
+    <time datetime="{{ post.date | date(format='%Y-%m-%d') }}">{{ post.date | date(format="%Y-%m-%d") }}</time>
+    <div>
+      <a class="post-title" href="{{ post.permalink | safe }}">{{ post.title }}</a>
+      {% if post.description %}<p>{{ post.description }}</p>{% endif %}
+      {% if post.taxonomies.tags is defined %}
+      <ul class="tags">
+        {% for tag in post.taxonomies.tags %}
+        <li><a href="{{ get_taxonomy_url(kind='tags', term=tag) | safe }}">#{{ tag }}</a></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+  </li>
+  {% endfor %}
+</ol>

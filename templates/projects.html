@@ -1,0 +1,25 @@
+{#- Projects page. The list itself lives in data/projects.toml. -#}
+{% extends "base.html" %}
+
+{% block meta %}
+{%- set meta_title = page.title -%}
+{%- if page.description %}{% set meta_description = page.description %}{% endif -%}
+{% endblock meta %}
+
+{% block content %}
+{%- set data = load_data(path="data/projects.toml") -%}
+<header class="page-header">
+  <h1>{{ page.title }}</h1>
+  {% if page.description %}<p class="lede">{{ page.description }}</p>{% endif %}
+</header>
+{% if page.content %}<div class="prose">{{ page.content | safe }}</div>{% endif %}
+<ul class="project-list">
+  {% for project in data.projects %}
+  <li>
+    <a class="project-name" href="{{ project.repo | safe }}">{{ project.name }}</a>
+    {% if project.language is defined %}<span class="project-lang">{{ project.language }}</span>{% endif %}
+    <p>{{ project.description }}</p>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock content %}

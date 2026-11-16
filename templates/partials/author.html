@@ -1,0 +1,13 @@
+{#- The box at the end of every post. Text comes from [extra] in zola.toml. -#}
+<aside class="author" aria-label="About the author">
+  <p class="label">Written by</p>
+  <p class="author-name"><a href="{{ get_url(path='/', trailing_slash=true) | safe }}">{{ config.author }}</a></p>
+  {% if config.extra.author_bio %}<p>{{ config.extra.author_bio }}</p>{% endif %}
+  {% if config.extra.author_cta %}<p class="author-cta">{{ config.extra.author_cta }}</p>{% endif %}
+  <ul class="contact">
+    {% if config.extra.email %}<li><a href="mailto:{{ config.extra.email }}">{{ config.extra.email }}</a></li>{% endif %}
+    {% if config.extra.github_url %}<li><a href="{{ config.extra.github_url | safe }}" rel="me">GitHub</a></li>{% endif %}
+    {% if config.extra.linkedin_url %}<li><a href="{{ config.extra.linkedin_url | safe }}" rel="me">LinkedIn</a></li>{% endif %}
+    <li><a href="{{ get_url(path='atom.xml') | safe }}">Feed</a></li>
+  </ul>
+</aside>
