@@ -6,6 +6,8 @@
 {%- if page.description %}{% set meta_description = page.description %}{% endif -%}
 {% endblock meta %}
 
+{% block jsonld %}{% include "partials/person-jsonld.html" %}{% endblock jsonld %}
+
 {% block content %}
 {%- set r = load_data(path="data/resume.toml") -%}
 <article class="resume">

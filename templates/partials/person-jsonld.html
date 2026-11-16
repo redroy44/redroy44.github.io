@@ -1,0 +1,2 @@
+{%- set r = load_data(path="data/resume.toml") -%}
+<script type="application/ld+json">{{ {"@context": "https://schema.org", "@type": "Person", "name": r.name, "jobTitle": r.headline, "description": r.summary, "url": get_url(path="/", trailing_slash=true), "address": {"@type": "PostalAddress", "addressLocality": config.extra.location}, "sameAs": [config.extra.github_url, config.extra.linkedin_url]} | json_encode | safe }}</script>

@@ -18,7 +18,7 @@ default_language = "en"
 author = "Piotr Bandurski"
 
 generate_feeds = true
-feed_filenames = ["atom.xml"]
+feed_filenames = ["atom.xml", "llms.txt"]
 generate_sitemap = true
 generate_robots_txt = true
 minify_html = false

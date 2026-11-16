@@ -252,6 +252,8 @@ The old site's post address `/2017/02/03/movielens/` redirects to the post's new
 
 After a deploy, you can check the feed with the [W3C feed validator](https://validator.w3.org/feed/).
 
+For AI agents, the build also writes `/llms.txt` (a Markdown index of pages, posts and projects, from `templates/llms.txt`) and puts schema.org JSON-LD in `<head>`: `Person` on the home and resume pages, `BlogPosting` on each post. Check the JSON-LD with the [Schema Markup Validator](https://validator.schema.org/).
+
 ## Updating Zola
 
 Change the version in `mise.toml`. CI reads the same file, so the live site builds with the version you pin. Read the Zola changelog first, since 0.23 was a breaking release.
