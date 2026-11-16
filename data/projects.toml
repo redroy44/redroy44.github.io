@@ -2,20 +2,26 @@
 # One [[projects]] block per project, shown in the order written here.
 #
 #   name         required
-#   repo         required, full URL
+#   url          required, full URL (repo, or live site for closed-source work)
 #   description  required, one line
 #   language     optional, shown as a small label
 #
 # These two entries were carried over from the old site. Add current work above them.
 
 [[projects]]
+name = "siezwolnij"
+url = "https://siezwolnij.pl"
+description = "siezwolnij.pl: a humorous generator of job resignation letters in Polish. An LLM writes the letter in a selected style; you download it as a PDF. Technologies used: Rust (axum), SQLite, Vue 3, TypeScript, Fly.io."
+language = "Rust"
+
+[[projects]]
 name = "parking-project"
-repo = "https://github.com/redroy44/parking-project"
+url = "https://github.com/redroy44/parking-project"
 description = "Parking lot classifier based on deep neural network. Technologies used: Python, Keras, numpy, matplotlib, OpenCV."
 language = "Python"
 
 [[projects]]
 name = "movieLens_analysis"
-repo = "https://github.com/redroy44/movieLens_analysis"
+url = "https://github.com/redroy44/movieLens_analysis"
 description = "Sources of the report on the movieLens dataset."
 language = "R"
