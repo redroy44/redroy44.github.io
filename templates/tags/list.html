@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block meta %}
+{%- set meta_title = "Tags" -%}
+{%- set meta_description = "All tags used on the blog." -%}
+{% endblock meta %}
+
+{% block content %}
+<header class="page-header">
+  <h1>Tags</h1>
+</header>
+<ul class="tag-index">
+  {% for term in terms %}
+  <li><a href="{{ term.permalink | safe }}">#{{ term.name }}</a> <span class="count">{{ term.page_count }}</span></li>
+  {% endfor %}
+</ul>
+{% endblock content %}

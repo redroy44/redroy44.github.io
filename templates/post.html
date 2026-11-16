@@ -1,0 +1,75 @@
+{#- A blog post. content/blog/_index.md points every post at this template. -#}
+{% extends "base.html" %}
+
+{% block meta %}
+{%- set meta_title = page.title -%}
+{%- set meta_type = "article" -%}
+{%- if page.description %}{% set meta_description = page.description %}{% endif -%}
+{#- Preview image: the post's own `extra.image`, else its generated card, else the site default. -#}
+{%- set card = "img/og/" ~ page.slug ~ ".png" -%}
+{%- if page.extra.image is defined %}{% set meta_image = page.extra.image %}
+{%- elif get_image_metadata(path=card, allow_missing=true) %}{% set meta_image = card %}{% endif -%}
+{% endblock meta %}
+
+{% block meta_extra %}
+<meta property="article:published_time" content="{{ page.date | date(format='%Y-%m-%d') }}">
+  {%- if page.updated %}
+  <meta property="article:modified_time" content="{{ page.updated | date(format='%Y-%m-%d') }}">
+  {%- endif %}
+  <meta property="article:author" content="{{ config.author }}">
+  {%- if page.taxonomies.tags is defined %}{% for tag in page.taxonomies.tags %}
+  <meta property="article:tag" content="{{ tag }}">
+  {%- endfor %}{% endif %}
+{% endblock meta_extra %}
+
+{% block content %}
+<article class="post">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    <p class="post-meta">
+      <time datetime="{{ page.date | date(format='%Y-%m-%d') }}">{{ page.date | date(format="%-d %B %Y") }}</time>
+      {% if page.updated %}<span>updated <time datetime="{{ page.updated | date(format='%Y-%m-%d') }}">{{ page.updated | date(format="%-d %B %Y") }}</time></span>{% endif %}
+      <span>{{ page.reading_time }} min read</span>
+    </p>
+    {% if page.taxonomies.tags is defined %}
+    <ul class="tags">
+      {% for tag in page.taxonomies.tags %}
+      <li><a href="{{ get_taxonomy_url(kind='tags', term=tag) | safe }}">#{{ tag }}</a></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </header>
+
+  {#- Table of contents: shown when a post has three or more top-level
+      headings. Set `toc = false` under [extra] in a post to hide it. -#}
+  {%- set show_toc = page.toc | length >= 3 -%}
+  {%- if page.extra.toc is defined %}{% set show_toc = page.extra.toc %}{% endif %}
+  {% if show_toc %}
+  <nav class="toc" aria-labelledby="toc-title">
+    <p id="toc-title" class="label">Contents</p>
+    <ol>
+      {% for h in page.toc %}
+      <li><a href="#{{ h.id }}">{{ h.title }}</a>
+        {%- if h.children %}
+        <ol>
+          {% for sub in h.children %}<li><a href="#{{ sub.id }}">{{ sub.title }}</a></li>{% endfor %}
+        </ol>
+        {%- endif %}
+      </li>
+      {% endfor %}
+    </ol>
+  </nav>
+  {% endif %}
+
+  <div class="prose">{{ page.content | safe }}</div>
+
+  <footer class="post-footer">
+    {% include "partials/author.html" %}
+    <nav class="post-nav" aria-label="Posts">
+      {#- In a date-sorted section `lower` is the older post and `higher` the newer one. -#}
+      {% if page.lower %}<a rel="prev" href="{{ page.lower.permalink | safe }}"><span>← Older</span>{{ page.lower.title }}</a>{% endif %}
+      {% if page.higher %}<a rel="next" href="{{ page.higher.permalink | safe }}"><span>Newer →</span>{{ page.higher.title }}</a>{% endif %}
+    </nav>
+  </footer>
+</article>
+{% endblock content %}

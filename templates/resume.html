@@ -1,0 +1,109 @@
+{#- Resume page. Every word on it comes from data/resume.toml; edit that file, not this one. -#}
+{% extends "base.html" %}
+
+{% block meta %}
+{%- set meta_title = page.title -%}
+{%- if page.description %}{% set meta_description = page.description %}{% endif -%}
+{% endblock meta %}
+
+{% block content %}
+{%- set r = load_data(path="data/resume.toml") -%}
+<article class="resume">
+  <header class="resume-header">
+    <div>
+      <h1>{{ r.name }}</h1>
+      <p class="role">{{ r.headline }}</p>
+    </div>
+    <ul class="resume-contact">
+      {% if r.location is defined %}<li>{{ r.location }}</li>{% endif %}
+      {% if config.extra.email %}<li><a href="mailto:{{ config.extra.email }}">{{ config.extra.email }}</a></li>{% endif %}
+      <li><a href="{{ config.base_url | safe }}">{{ config.base_url | replace(from="https://", to="") }}</a></li>
+      {% if config.extra.github_url %}<li><a href="{{ config.extra.github_url | safe }}">{{ config.extra.github_url | replace(from="https://", to="") }}</a></li>{% endif %}
+      {% if config.extra.linkedin_url %}<li><a href="{{ config.extra.linkedin_url | safe }}">{{ config.extra.linkedin_url | replace(from="https://www.", to="") | replace(from="https://", to="") | trim_end(pat="/") }}</a></li>{% endif %}
+    </ul>
+  </header>
+
+  <p class="print-hint no-print">This page is print-ready: use your browser's Print command and choose “Save as PDF”.</p>
+
+  {% if r.summary is defined %}
+  <section>
+    <h2>Summary</h2>
+    <p>{{ r.summary }}</p>
+  </section>
+  {% endif %}
+
+  {% if r.skills is defined %}
+  <section>
+    <h2>Skills</h2>
+    <dl class="skills">
+      {% for group in r.skills %}
+      <dt>{{ group.name }}</dt>
+      <dd>{{ group.items | join(sep=", ") }}</dd>
+      {% endfor %}
+    </dl>
+  </section>
+  {% endif %}
+
+  {% if r.experience is defined %}
+  <section>
+    <h2>Experience</h2>
+    {% for job in r.experience %}
+    <div class="entry">
+      <div class="entry-head">
+        <h3>{{ job.role }} <span class="org">· {% if job.url is defined %}<a href="{{ job.url | safe }}">{{ job.company }}</a>{% else %}{{ job.company }}{% endif %}</span></h3>
+        <p class="dates">{{ job.start }} – {{ job.end }}</p>
+      </div>
+      {% if job.location is defined %}<p class="entry-sub">{{ job.location }}</p>{% endif %}
+      {% if job.summary is defined %}<p>{{ job.summary }}</p>{% endif %}
+      {% if job.highlights is defined %}
+      <ul>
+        {% for item in job.highlights %}<li>{{ item }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+      {% if job.stack is defined %}<p class="stack">{{ job.stack | join(sep=" · ") }}</p>{% endif %}
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  {% if r.projects is defined %}
+  <section>
+    <h2>Projects</h2>
+    {% for project in r.projects %}
+    <div class="entry">
+      <div class="entry-head">
+        <h3>{% if project.url is defined %}<a href="{{ project.url | safe }}">{{ project.name }}</a>{% else %}{{ project.name }}{% endif %}</h3>
+      </div>
+      <p>{{ project.description }}</p>
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  {% if r.education is defined %}
+  <section>
+    <h2>Education</h2>
+    {% for school in r.education %}
+    <div class="entry">
+      <div class="entry-head">
+        <h3>{{ school.degree }} <span class="org">· {{ school.institution }}</span></h3>
+        <p class="dates">{{ school.start }} – {{ school.end }}</p>
+      </div>
+      {% if school.notes is defined %}<p>{{ school.notes }}</p>{% endif %}
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  {% if r.extras is defined %}
+  {% for extra in r.extras %}
+  <section>
+    <h2>{{ extra.title }}</h2>
+    <ul>
+      {% for item in extra.items %}<li>{{ item }}</li>{% endfor %}
+    </ul>
+  </section>
+  {% endfor %}
+  {% endif %}
+</article>
+{% endblock content %}

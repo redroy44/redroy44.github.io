@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#MISE description="Set the site domain: mise run set-domain example.org"
+set -euo pipefail
+
+domain="${1:-}"
+if ! printf '%s' "$domain" | grep -Eq '^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$'; then
+  echo "usage: mise run set-domain example.org   (bare domain: lowercase, no https://, no path)" >&2
+  exit 1
+fi
+
+# base_url is what Zola uses for canonical URLs, the sitemap and the feed.
+sed -i.bak -E "s|^base_url = .*|base_url = \"https://${domain}\"|" zola.toml
+rm -f zola.toml.bak
+
+# GitHub Pages reads the custom domain from a CNAME file at the site root.
+printf '%s\n' "$domain" > static/CNAME
+
+echo "base_url set to https://${domain} and static/CNAME written"

@@ -1,0 +1,56 @@
+# Builds and checks the site on every pull request and push; deploys to GitHub
+# Pages when master changes. Requires Settings -> Pages -> Source: "GitHub Actions".
+name: Build and deploy
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One deployment at a time; a newer push replaces a queued one.
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # Installs the Zola version pinned in mise.toml.
+      - uses: jdx/mise-action@v5
+
+      # A broken internal link fails the run; broken external links only warn.
+      - name: Check links
+        run: mise run check
+
+      - name: Build
+        run: mise run build
+
+      - name: Validate HTML
+        run: mise run validate
+
+      - name: Upload Pages artifact
+        if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: public
+
+  deploy:
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

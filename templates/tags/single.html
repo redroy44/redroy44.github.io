@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block meta %}
+{%- set meta_title = "Posts tagged #" ~ term.name -%}
+{%- set meta_description = "Posts tagged " ~ term.name ~ "." -%}
+{% endblock meta %}
+
+{% block feeds %}
+<link rel="alternate" type="application/atom+xml" title="Posts tagged {{ term.name }}" href="{{ term.permalink | safe }}atom.xml">
+{% endblock feeds %}
+
+{% block content %}
+<header class="page-header">
+  <h1><span class="label">Tag</span> #{{ term.name }}</h1>
+</header>
+{% set posts = term.pages %}
+{% include "partials/post-list.html" %}
+<p class="more"><a href="{{ get_url(path='tags') | safe }}/">All tags →</a> · <a href="{{ term.permalink | safe }}atom.xml">Feed for this tag</a></p>
+{% endblock content %}

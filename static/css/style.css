@@ -1,0 +1,575 @@
+/*
+  The whole theme in one file. Sections, in order:
+    1. Fonts            5. Home, lists, tags
+    2. Design tokens    6. Prose (post and page bodies)
+    3. Base elements    7. Code
+    4. Layout shell     8. Resume, projects, 404
+                        9. Print
+  To restyle the site, start with the tokens in section 2.
+*/
+
+/* 1. Fonts ---------------------------------------------------------------
+   Self-hosted variable fonts, split into a basic Latin file and a Latin
+   Extended file (Polish diacritics). The browser downloads the second one
+   only on pages that use those characters. */
+
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url("../fonts/source-serif-4-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url("../fonts/source-serif-4-latin-ext-wght-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url("../fonts/source-serif-4-latin-wght-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url("../fonts/source-serif-4-latin-ext-wght-italic.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("../fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("../fonts/jetbrains-mono-latin-ext-wght-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* 2. Design tokens ------------------------------------------------------- */
+
+:root {
+  color-scheme: light dark;
+
+  --font-body: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Light theme: warm paper, dark ink, one rust accent. */
+  --bg: #fbf9f5;
+  --bg-raised: #f3efe8;
+  --text: #1f1b17;
+  --text-muted: #675f56;
+  --rule: #ddd6ca;
+  --accent: #a63a12;
+  --accent-soft: #a63a1222;
+  --code-bg: #fefdfb;
+
+  --measure: 42rem;     /* width of the text column */
+  --gutter: 1.25rem;    /* space between text and the screen edge */
+}
+
+/* Dark theme. It applies in two cases, so the values appear twice (CSS has no
+   way to share them): when the system is dark and the reader has not chosen
+   light, and when the reader chose dark with the header switch. Change both. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #171412;
+    --bg-raised: #211d1a;
+    --text: #e9e3da;
+    --text-muted: #a2988c;
+    --rule: #3a342e;
+    --accent: #ee8a5c;
+    --accent-soft: #ee8a5c2e;
+    --code-bg: #1f1b18;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #171412;
+  --bg-raised: #211d1a;
+  --text: #e9e3da;
+  --text-muted: #a2988c;
+  --rule: #3a342e;
+  --accent: #ee8a5c;
+  --accent-soft: #ee8a5c2e;
+  --code-bg: #1f1b18;
+}
+:root[data-theme="light"] { color-scheme: light; }
+
+/* Cross-fade between pages in browsers that support it; no JavaScript. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.15s; }
+}
+
+/* 3. Base elements ------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: 1rem;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  line-height: 1.65;
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+  overflow-wrap: break-word;
+}
+
+h1, h2, h3, h4 {
+  line-height: 1.2;
+  font-weight: 650;
+  text-wrap: balance;
+  margin: 2.2em 0 0.6em;
+}
+h1 { font-size: 2.1rem; letter-spacing: -0.015em; margin-top: 0; }
+h2 { font-size: 1.5rem; letter-spacing: -0.01em; }
+h3 { font-size: 1.2rem; }
+h4 { font-size: 1.05rem; }
+
+p, ul, ol, dl, blockquote, pre, table, figure, details { margin: 0 0 1.25em; }
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+img, svg, video { max-width: 100%; height: auto; }
+hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5em 0; }
+::selection { background: var(--accent-soft); }
+
+/* Small monospace label used for dates, tags, navigation and section kickers. */
+.label, .site-header nav, .site-footer, .tags, .post-list time, .post-meta,
+.more, .count, .dates, .stack, .project-lang, .resume-contact, .print-hint {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.01em;
+}
+
+/* 4. Layout shell -------------------------------------------------------- */
+
+.wrap {
+  width: 100%;
+  max-width: calc(var(--measure) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.skip-link {
+  position: absolute;
+  left: -999rem;
+  background: var(--bg);
+  padding: 0.5rem 0.75rem;
+}
+.skip-link:focus { left: 0.5rem; top: 0.5rem; z-index: 10; }
+
+.site-header { border-bottom: 1px solid var(--rule); }
+.site-header .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+  padding-block: 1.1rem;
+}
+.site-name {
+  color: var(--text);
+  font-weight: 650;
+  font-size: 1.15rem;
+  text-decoration: none;
+}
+.site-name::before { content: "› "; color: var(--accent); }
+.site-header ul, .site-footer ul, .contact, .tags {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+}
+.site-header nav { margin-left: auto; }
+.theme-toggle {
+  align-self: center;
+  display: inline-flex;
+  padding: 0.4rem;
+  margin: -0.4rem -0.4rem -0.4rem 0;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.theme-toggle:hover { color: var(--accent); }
+.theme-toggle[hidden] { display: none; }
+.site-header nav a { color: var(--text-muted); text-decoration: none; padding-block: 0.35rem; display: inline-block; }
+.site-header nav a:hover { color: var(--text); }
+.site-header nav a[aria-current="page"] { color: var(--text); box-shadow: 0 2px 0 var(--accent); }
+
+main { padding-block: 3rem 4rem; }
+
+.site-footer { border-top: 1px solid var(--rule); color: var(--text-muted); }
+.site-footer .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  padding-block: 1.5rem 2.5rem;
+}
+.site-footer p { margin: 0; }
+.site-footer a { color: inherit; }
+
+.page-header { margin-bottom: 2.25rem; }
+.page-header h1 { margin-bottom: 0.4rem; }
+.lede { color: var(--text-muted); font-size: 1.15rem; margin: 0; }
+.label { color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; }
+h1 .label { display: block; margin-bottom: 0.5rem; }
+
+/* 5. Home, lists, tags --------------------------------------------------- */
+
+.intro { margin-bottom: 3.5rem; }
+.intro h1 { font-size: 2.5rem; margin-bottom: 0.2rem; }
+.role { color: var(--text-muted); font-family: var(--font-mono); font-size: 0.875rem; margin-bottom: 1.75rem; }
+.intro .prose h2 { font-family: var(--font-mono); font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-top: 2.2rem; }
+.contact { font-family: var(--font-mono); font-size: 0.875rem; margin-top: 1.75rem; }
+.contact li + li::before { content: "/"; color: var(--rule); margin-right: 1.25rem; }
+.contact a { padding-block: 0.3rem; display: inline-block; }
+
+h2.label { font-size: 0.8rem; margin: 0 0 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--rule); }
+
+.post-list { list-style: none; margin: 0 0 1.5rem; padding: 0; }
+.post-list > li {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 0 1rem;
+  padding-block: 0.9rem;
+  border-bottom: 1px solid var(--rule);
+}
+.post-list time { color: var(--text-muted); padding-top: 0.42rem; white-space: nowrap; }
+.post-title { color: var(--text); font-weight: 600; font-size: 1.2rem; line-height: 1.3; text-decoration: none; }
+.post-title:hover { color: var(--accent); text-decoration: underline; text-decoration-thickness: 1px; }
+.post-list p { color: var(--text-muted); font-size: 1rem; line-height: 1.5; margin: 0.2rem 0 0.35rem; }
+
+.tags { gap: 0.1rem 0.9rem; }
+.tags a { color: var(--text-muted); text-decoration: none; display: inline-block; padding-block: 0.15rem; }
+.tags a:hover { color: var(--accent); }
+
+.more { margin: 0; }
+.more a { text-decoration: none; }
+.more a:hover { text-decoration: underline; }
+
+.tag-index { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.6rem 1.75rem; font-family: var(--font-mono); font-size: 1rem; }
+.tag-index a { text-decoration: none; }
+.count { color: var(--text-muted); }
+
+.post-meta { color: var(--text-muted); margin: 0 0 0.4rem; display: flex; flex-wrap: wrap; gap: 0.1rem 0; }
+.post-meta > * + *::before { content: "·"; margin-inline: 0.6rem; }
+
+/* Table of contents: a boxed list above the text; on wide screens it moves
+   into the right margin and stays in view while you scroll. */
+.toc { margin: 0 0 2.25rem; padding: 0.9rem 1.1rem; border: 1px solid var(--rule); border-radius: 6px; font-size: 0.95rem; line-height: 1.4; }
+.toc .label { margin: 0 0 0.5rem; }
+.toc ol { list-style: none; margin: 0; padding: 0; }
+.toc ol ol { padding-left: 1rem; }
+.toc li { margin-block: 0.3rem; }
+.toc a { color: var(--text-muted); text-decoration: none; display: inline-block; padding-block: 0.1rem; }
+.toc a:hover { color: var(--accent); }
+
+@media (min-width: 80rem) {
+  .toc {
+    float: right;
+    position: sticky;
+    top: 2rem;
+    width: 15rem;
+    margin: 0 -18rem 2rem 0;
+    padding: 0 0 0 1rem;
+    border: 0;
+    border-left: 1px solid var(--rule);
+    border-radius: 0;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+    font-size: 0.875rem;
+  }
+}
+
+.post-footer { margin-top: 3.5rem; font-size: 1rem; }
+
+/* Author box at the end of a post */
+.author { padding: 1.25rem 1.4rem; margin-bottom: 2rem; background: var(--bg-raised); border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; }
+.author p { margin: 0 0 0.5rem; }
+.author .label { margin-bottom: 0.2rem; }
+.author-name { font-size: 1.25rem; font-weight: 650; }
+.author-name a { color: var(--text); text-decoration: none; }
+.author-name a:hover { color: var(--accent); }
+.author-cta { font-weight: 600; }
+.author .contact { margin-top: 0.9rem; font-size: 0.8rem; }
+.author .contact li + li::before { content: none; }
+.post-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.post-nav a { text-decoration: none; line-height: 1.35; }
+.post-nav a span { display: block; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.2rem; }
+.post-nav a[rel="next"] { grid-column: 2; text-align: right; }
+
+/* 6. Prose --------------------------------------------------------------- */
+
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+
+/* Zola turns each heading into a link to itself (insert_anchor_links). */
+.prose :is(h2, h3, h4) a { color: inherit; text-decoration: none; }
+.prose :is(h2, h3, h4) a:hover::after { content: " #"; color: var(--accent); }
+
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li { margin-block: 0.3em; }
+.prose li > ul, .prose li > ol { margin-bottom: 0; }
+.prose li::marker { color: var(--text-muted); }
+.prose ul:has(> li > input[type="checkbox"]) { list-style: none; padding-left: 0.2em; }
+.prose input[type="checkbox"] { accent-color: var(--accent); margin-right: 0.4em; }
+
+.prose blockquote {
+  margin-inline: 0;
+  padding: 0.1rem 0 0.1rem 1.25rem;
+  border-left: 3px solid var(--accent);
+  color: var(--text-muted);
+  font-style: italic;
+}
+.prose blockquote > :last-child { margin-bottom: 0; }
+.prose blockquote ul { list-style: none; padding-left: 0; font-style: normal; font-size: 1rem; }
+
+/* Wide tables scroll sideways inside their own box instead of the page. */
+.prose table {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+.prose th, .prose td { padding: 0.45rem 0.9rem 0.45rem 0; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+.prose th:last-child, .prose td:last-child { padding-right: 0; }
+.prose thead th { border-bottom: 2px solid var(--text-muted); font-family: var(--font-mono); font-size: 0.8rem; font-weight: 500; white-space: nowrap; }
+
+.prose img { display: block; margin-inline: auto; border-radius: 4px; }
+
+.prose kbd {
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  padding: 0.1em 0.4em;
+  border: 1px solid var(--rule);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--bg-raised);
+}
+
+.prose details { border: 1px solid var(--rule); border-radius: 6px; padding: 0.6rem 1rem; }
+.prose summary { cursor: pointer; font-weight: 600; }
+.prose details[open] summary { margin-bottom: 0.75rem; }
+.prose details > :last-child { margin-bottom: 0; }
+
+.prose sup { line-height: 0; }
+.footnote-reference a { text-decoration: none; font-family: var(--font-mono); font-size: 0.85em; padding-inline: 0.15em; }
+.footnotes, .footnote-definition { font-size: 1rem; color: var(--text-muted); }
+.footnotes-list { padding-left: 1.4em; }
+.footnotes p { margin-bottom: 0.4em; }
+
+/* 7. Code ---------------------------------------------------------------- */
+
+code, pre, kbd, samp { font-family: var(--font-mono); font-variant-ligatures: none; }
+
+/* Inline code */
+:not(pre) > code {
+  font-size: 0.86em;
+  padding: 0.12em 0.35em;
+  border-radius: 4px;
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+  overflow-wrap: anywhere;
+}
+
+/* Code blocks: never wrap, scroll sideways instead. The background uses the
+   site tokens rather than the highlight theme's own, so blocks sit in the page. */
+pre {
+  background: var(--code-bg) !important;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  white-space: pre;
+  word-wrap: normal;
+  overflow-wrap: normal;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  tab-size: 4;
+  -webkit-overflow-scrolling: touch;
+}
+pre code { font-size: inherit; padding: 0; border: 0; background: none; white-space: inherit; }
+pre:focus-visible { outline-offset: -2px; }
+
+/* "Copy" button, added to each code block by static/js/site.js. */
+.code-wrap { position: relative; }
+.copy-button {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.45rem;
+  padding: 0.15rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.code-wrap:hover .copy-button, .copy-button:focus-visible { opacity: 1; }
+.copy-button:hover { color: var(--accent); border-color: var(--accent); }
+/* Touch screens have no hover, so keep it visible there. */
+@media (hover: none) { .copy-button { opacity: 0.85; } }
+
+/* Required by Zola's highlighter: one element per line. */
+.giallo-l { display: inline-block; min-height: 1lh; width: 100%; vertical-align: top; }
+.giallo-ln { display: inline-block; user-select: none; margin-right: 0.8em; min-width: 2ch; text-align: right; color: var(--text-muted); }
+pre mark { display: block; color: inherit; background: var(--accent-soft); }
+
+/* 8. Resume, projects, 404 ----------------------------------------------- */
+
+.resume { font-size: 1rem; line-height: 1.55; }
+.resume-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 2px solid var(--text);
+}
+.resume-header h1 { margin: 0 0 0.2rem; }
+.resume-header .role { margin: 0; }
+.resume-contact { list-style: none; margin: 0; padding: 0; text-align: right; line-height: 1.7; }
+.resume-contact a { color: inherit; text-decoration-color: var(--rule); }
+.print-hint { color: var(--text-muted); margin: 1rem 0 0; }
+
+.resume section { margin-top: 2rem; }
+.resume h2 {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin: 0 0 0.8rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--rule);
+}
+.resume p, .resume ul { margin-bottom: 0.5rem; }
+.resume ul { padding-left: 1.2em; }
+.resume section > ul li, .entry li { margin-block: 0.15rem; }
+.entry { margin-bottom: 1.25rem; break-inside: avoid; }
+.entry-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0 1rem; }
+.entry-head h3 { font-size: 1.1rem; margin: 0; }
+.entry-head .org { font-weight: 400; }
+.entry-head .org a, .entry-head h3 > a { color: inherit; text-decoration-color: var(--rule); }
+.dates, .entry-sub, .stack { color: var(--text-muted); margin: 0; }
+.entry-sub { font-size: 0.95rem; margin-bottom: 0.4rem; font-style: italic; }
+.dates { white-space: nowrap; }
+.stack { margin-top: 0.3rem; }
+
+.skills { display: grid; grid-template-columns: max-content 1fr; gap: 0.3rem 1.25rem; margin: 0; }
+.skills dt { font-weight: 600; }
+.skills dd { margin: 0; }
+
+.project-list { list-style: none; padding: 0; margin: 0; }
+.project-list li { padding-block: 1rem; border-bottom: 1px solid var(--rule); }
+.project-list li:first-child { border-top: 1px solid var(--rule); }
+.project-name { font-family: var(--font-mono); font-size: 1rem; font-weight: 600; text-decoration: none; }
+.project-name:hover { text-decoration: underline; }
+.project-lang { color: var(--text-muted); margin-left: 0.6rem; }
+.project-list p { margin: 0.25rem 0 0; }
+
+.not-found { padding-block: 3rem; }
+.not-found h1 { margin-top: 0.5rem; }
+
+/* Narrow screens */
+@media (max-width: 34rem) {
+  body { font-size: 1.0625rem; }
+  h1, .intro h1 { font-size: 1.85rem; }
+  h2 { font-size: 1.35rem; }
+  main { padding-block: 2rem 3rem; }
+  .post-list > li { grid-template-columns: 1fr; }
+  .post-list time { padding-top: 0; }
+  .resume-contact { text-align: left; }
+  .skills { grid-template-columns: 1fr; gap: 0; }
+  .skills dd { margin-bottom: 0.5rem; }
+  /* Code blocks run edge to edge so more of each line is visible. */
+  .prose pre { margin-inline: calc(-1 * var(--gutter)); border-radius: 0; border-inline: 0; padding-inline: var(--gutter); }
+  .post-nav { grid-template-columns: 1fr; }
+  .post-nav a[rel="next"] { grid-column: 1; text-align: left; }
+}
+
+/* 9. Print ---------------------------------------------------------------
+   Tuned for the resume (A4 or Letter, one to two pages) but applies to every
+   page: black on white, no site chrome. */
+
+@media print {
+  @page { size: auto; margin: 14mm 15mm; }
+
+  :root, :root[data-theme="dark"], :root:not([data-theme="light"]) {
+    color-scheme: light;
+    --bg: #fff;
+    --bg-raised: #fff;
+    --text: #000;
+    --text-muted: #444;
+    --rule: #bbb;
+    --accent: #8a2f0c;
+    --code-bg: #f6f6f6;
+  }
+
+  body { font-size: 10.5pt; line-height: 1.4; background: #fff; }
+  .site-header, .site-footer, .skip-link, .no-print, .post-nav, .toc, .copy-button { display: none !important; }
+  main { padding: 0; }
+  .wrap { max-width: none; padding: 0; }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3 { break-after: avoid; }
+  pre { white-space: pre-wrap; overflow: visible; break-inside: avoid; border-color: #ccc; }
+  /* Code prints dark on light whatever theme was showing. */
+  pre, pre * { color: #111 !important; background: none !important; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #444; word-break: break-all; }
+
+  .resume { font-size: 10pt; line-height: 1.38; }
+  .resume-header { padding-bottom: 3mm; border-bottom-width: 1.5pt; }
+  .resume-header h1 { font-size: 20pt; }
+  .resume-contact { font-size: 8pt; line-height: 1.5; }
+  .resume section { margin-top: 5mm; }
+  .resume h2 { font-size: 8pt; margin-bottom: 2mm; padding-bottom: 1mm; }
+  .entry { margin-bottom: 3.5mm; }
+  .entry-head h3 { font-size: 10.5pt; }
+  .dates, .stack { font-size: 8pt; }
+  .resume p, .resume ul { margin-bottom: 1.2mm; }
+}

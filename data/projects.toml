@@ -1,0 +1,19 @@
+# The Projects page is generated from this file (templates/projects.html).
+# One [[projects]] block per project, shown in the order written here.
+#
+#   name         required
+#   repo         required, full URL
+#   description  required, one line
+#   language     optional, shown as a small label
+
+[[projects]]
+name = "PLACEHOLDER project-one"
+repo = "https://github.com/your-handle/project-one"
+description = "PLACEHOLDER: one line saying what it does and who it is for."
+language = "Rust"
+
+[[projects]]
+name = "PLACEHOLDER project-two"
+repo = "https://github.com/your-handle/project-two"
+description = "PLACEHOLDER: one line saying what it does and who it is for."
+language = "Python"

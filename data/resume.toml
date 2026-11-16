@@ -1,0 +1,75 @@
+# The Resume page is generated from this file (templates/resume.html).
+# Edit the values here; you should not need to touch any HTML.
+#
+# Email, GitHub and LinkedIn come from [extra] in zola.toml, so they are not
+# repeated here. Any section you delete (skills, projects, education, extras)
+# simply disappears from the page. Entries appear in the order written.
+
+name = "Piotr Bandurski"
+headline = "PLACEHOLDER: role and speciality"
+location = "Wrocław, Poland"
+summary = "PLACEHOLDER: two or three sentences on what you do, what you are good at, and the kind of work you want."
+
+# --- Skills: one block per group --------------------------------------------
+
+[[skills]]
+name = "PLACEHOLDER group"
+items = ["PLACEHOLDER skill", "PLACEHOLDER skill", "PLACEHOLDER skill"]
+
+[[skills]]
+name = "PLACEHOLDER group"
+items = ["PLACEHOLDER skill", "PLACEHOLDER skill", "PLACEHOLDER skill"]
+
+# --- Experience: newest first -----------------------------------------------
+#   role, company, start, end   required ("end" can be "Present")
+#   url, location, summary      optional
+#   highlights                  optional list of bullet points
+#   stack                       optional list, printed as one small line
+
+[[experience]]
+role = "PLACEHOLDER role"
+company = "PLACEHOLDER company"
+url = "https://example.com"
+location = "PLACEHOLDER city or Remote"
+start = "2024"
+end = "Present"
+summary = "PLACEHOLDER: one sentence on what the team or product does."
+highlights = [
+  "PLACEHOLDER: something you built or changed, with a measurable result.",
+  "PLACEHOLDER: something you built or changed, with a measurable result.",
+  "PLACEHOLDER: something you built or changed, with a measurable result.",
+]
+stack = ["PLACEHOLDER", "PLACEHOLDER", "PLACEHOLDER"]
+
+[[experience]]
+role = "PLACEHOLDER role"
+company = "PLACEHOLDER company"
+start = "2021"
+end = "2024"
+highlights = [
+  "PLACEHOLDER: something you built or changed, with a measurable result.",
+  "PLACEHOLDER: something you built or changed, with a measurable result.",
+]
+stack = ["PLACEHOLDER", "PLACEHOLDER"]
+
+# --- Projects (optional) -----------------------------------------------------
+
+[[projects]]
+name = "PLACEHOLDER project"
+url = "https://github.com/your-handle/project"
+description = "PLACEHOLDER: one line on what it is and your part in it."
+
+# --- Education ---------------------------------------------------------------
+
+[[education]]
+degree = "PLACEHOLDER degree"
+institution = "PLACEHOLDER institution"
+start = "2015"
+end = "2019"
+notes = "PLACEHOLDER: optional note, or delete this line."
+
+# --- Extra sections (optional): talks, languages, certifications, ... --------
+
+[[extras]]
+title = "Languages"
+items = ["PLACEHOLDER language (level)", "PLACEHOLDER language (level)"]

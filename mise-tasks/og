@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+#MISE description="Generate link-preview images (static/img/og/) with headless Chrome"
+set -euo pipefail
+
+# How it works: build the site, including the draft-only page /og-cards/, into
+# a temporary folder; that page holds one 1200x630 card per published post.
+# Then open it once per card in headless Chrome and save a screenshot.
+# The card design is templates/og-cards.html.
+
+out_dir="static/img/og"
+
+find_chrome() {
+  local c
+  for c in "${CHROME:-}" google-chrome google-chrome-stable chromium chromium-browser chrome-headless-shell \
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    "/Applications/Chromium.app/Contents/MacOS/Chromium" \
+    "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge" \
+    "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"; do
+    [ -n "$c" ] || continue
+    if command -v "$c" >/dev/null 2>&1; then command -v "$c"; return 0; fi
+  done
+  return 1
+}
+
+# A missing or broken browser must not block a build or a deploy: pages fall
+# back to static/img/og-default.png. In GitHub Actions the message shows up as
+# a warning on the run.
+give_up() {
+  rm -rf "$out_dir"
+  if [ -n "${GITHUB_ACTIONS:-}" ]; then echo "::warning title=Link-preview images::$1"; fi
+  echo "og: $1; skipping link-preview images" >&2
+  exit 0
+}
+
+chrome=$(find_chrome) || give_up "no Chrome or Chromium found (set CHROME=/path/to/browser)"
+
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+
+zola build --drafts --force --output-dir "$tmp/site" >/dev/null
+
+cards="$tmp/site/og-cards/index.html"
+ids=$(grep -o 'id="card-[^"]*"' "$cards" | sed -e 's/^id="card-//' -e 's/"$//')
+
+rm -rf "$out_dir"
+mkdir -p "$out_dir"
+
+# Run a command, killing it if it takes longer than 30 seconds, so a browser
+# that fails to start cannot hang the build. (macOS has no `timeout` command.)
+with_timeout() {
+  "$@" >/dev/null 2>&1 &
+  local pid=$! waited=0
+  while kill -0 "$pid" 2>/dev/null; do
+    if [ "$waited" -ge 60 ]; then
+      kill -9 "$pid" 2>/dev/null || true
+      return 124
+    fi
+    sleep 0.5
+    waited=$((waited + 1))
+  done
+  wait "$pid"
+}
+
+count=0
+for id in $ids; do
+  # --no-sandbox: the page is our own local file, and the sandbox is not
+  # available in every CI container.
+  with_timeout "$chrome" --headless --no-sandbox --disable-gpu --hide-scrollbars \
+    --user-data-dir="$tmp/profile" --window-size=1200,630 \
+    --virtual-time-budget=3000 \
+    --screenshot="$PWD/$out_dir/$id.png" \
+    "file://$cards#card-$id" || true
+  [ -s "$out_dir/$id.png" ] || give_up "$chrome did not render the card for '$id'"
+  count=$((count + 1))
+done
+
+echo "og: wrote $count images to $out_dir/"

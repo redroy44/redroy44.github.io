@@ -1,0 +1,26 @@
+{#- Generic section template. The blog list (content/blog/_index.md) uses it. -#}
+{% extends "base.html" %}
+
+{% block meta %}
+{%- set meta_title = section.title -%}
+{%- if section.description %}{% set meta_description = section.description %}{% endif -%}
+{% endblock meta %}
+
+{% block feeds %}
+{% if section.generate_feeds %}<link rel="alternate" type="application/atom+xml" title="{{ section.title }}" href="{{ section.permalink | safe }}atom.xml">{% endif %}
+{% endblock feeds %}
+
+{% block content %}
+<header class="page-header">
+  <h1>{{ section.title }}</h1>
+  {% if section.description %}<p class="lede">{{ section.description }}</p>{% endif %}
+</header>
+{% if section.content %}<div class="prose">{{ section.content | safe }}</div>{% endif %}
+{% set posts = section.pages %}
+{% if posts %}
+{% include "partials/post-list.html" %}
+<p class="more"><a href="{{ get_url(path='tags') | safe }}/">Browse by tag →</a></p>
+{% else %}
+<p>No posts yet.</p>
+{% endif %}
+{% endblock content %}
