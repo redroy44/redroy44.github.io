@@ -4,21 +4,32 @@
 # Email, GitHub and LinkedIn come from [extra] in zola.toml, so they are not
 # repeated here. Any section you delete (skills, projects, education, extras)
 # simply disappears from the page. Entries appear in the order written.
+#
+# The text below was taken from the LinkedIn profile export (2026). Older roles
+# are shortened so the page prints on two sheets; the full text is on LinkedIn.
 
 name = "Piotr Bandurski"
-headline = "PLACEHOLDER: role and speciality"
+headline = "AI Engineer"
 location = "Wrocław, Poland"
-summary = "PLACEHOLDER: two or three sentences on what you do, what you are good at, and the kind of work you want."
+summary = "I'm a passionate computer science engineer with a broad knowledge spanning the whole modern data stack - from Big Data systems to Deep Learning solutions. I'm dedicated to expand my career further in this direction."
 
 # --- Skills: one block per group --------------------------------------------
 
 [[skills]]
-name = "PLACEHOLDER group"
-items = ["PLACEHOLDER skill", "PLACEHOLDER skill", "PLACEHOLDER skill"]
+name = "Languages"
+items = ["Rust", "Scala", "Python", "TypeScript", "Go", "C", "R"]
 
 [[skills]]
-name = "PLACEHOLDER group"
-items = ["PLACEHOLDER skill", "PLACEHOLDER skill", "PLACEHOLDER skill"]
+name = "AI and ML"
+items = ["LLM agents", "OpenAI APIs", "MLflow", "Scikit-Learn", "Keras", "catboost", "spaCy", "gensim"]
+
+[[skills]]
+name = "Backend and data"
+items = ["Cats Effect", "Akka", "http4s", "FS2", "Kafka", "Apache Spark", "Apache Hive", "Hadoop", "PostgreSQL"]
+
+[[skills]]
+name = "Cloud and operations"
+items = ["AWS", "GCP", "Terraform", "Kubernetes", "Helm", "ArgoCD", "Docker", "OpenTelemetry", "DataDog", "GitHub Actions"]
 
 # --- Experience: newest first -----------------------------------------------
 #   role, company, start, end   required ("end" can be "Present")
@@ -27,49 +38,133 @@ items = ["PLACEHOLDER skill", "PLACEHOLDER skill", "PLACEHOLDER skill"]
 #   stack                       optional list, printed as one small line
 
 [[experience]]
-role = "PLACEHOLDER role"
-company = "PLACEHOLDER company"
-url = "https://example.com"
-location = "PLACEHOLDER city or Remote"
-start = "2024"
+role = "AI Engineer"
+company = "Scalac"
+start = "Jan 2026"
 end = "Present"
-summary = "PLACEHOLDER: one sentence on what the team or product does."
+summary = "Building an AI-powered Recruiter Sourcing Copilot for a global HR technology company."
 highlights = [
-  "PLACEHOLDER: something you built or changed, with a measurable result.",
-  "PLACEHOLDER: something you built or changed, with a measurable result.",
-  "PLACEHOLDER: something you built or changed, with a measurable result.",
+  "Designed and implemented the core AI Copilot agent backend in Rust: agentic tool-use loop, multi-turn conversation state, PostgreSQL persistence",
+  "Prototyped a2ui (Agent-to-UI), a pattern enabling the LLM to dynamically render rich workspaces, custom components, and interactive surfaces inside a chat interface",
+  "Implemented distributed tracing (OpenTelemetry) and LLM observability (MLflow GenAI traces) across the full agent stack",
+  "Built a Rust proxy service for sandboxed agent evaluation with JSON-RPC routing and Helm-based deployment",
+  "Provisioned and migrated cloud infrastructure (Terraform/HCL) across multiple repos: managed Postgres, ECS services, ArgoCD apps",
+  "Contributed TypeScript frontend components, prompt engineering, and architecture documentation",
 ]
-stack = ["PLACEHOLDER", "PLACEHOLDER", "PLACEHOLDER"]
+stack = ["Rust", "TypeScript", "Python", "Terraform", "PostgreSQL", "OpenTelemetry", "MLflow", "OpenAI APIs", "Docker", "Helm", "ArgoCD", "AWS", "GitHub Actions"]
 
 [[experience]]
-role = "PLACEHOLDER role"
-company = "PLACEHOLDER company"
-start = "2021"
-end = "2024"
+role = "Senior Scala Engineer"
+company = "Scalac"
+location = "Wrocław"
+start = "Apr 2023"
+end = "Dec 2025"
+summary = "Contributing to a modern, scalable recruiting and referral platform for a global HR technology company."
 highlights = [
-  "PLACEHOLDER: something you built or changed, with a measurable result.",
-  "PLACEHOLDER: something you built or changed, with a measurable result.",
+  "Architecting and implementing distributed event-driven microservices for candidate management, referrals, gamification, and rewards",
+  "Designing RESTful APIs and integrating with Kafka-based messaging for robust, scalable interactions",
+  "Leveraging Scala 3 and Cats Effect for pure functional programming, resource safety, and concurrency",
+  "Building and maintaining automated CI/CD pipelines, cloud infrastructure (AWS, Terraform, CloudFormation), and deployment workflows",
+  "Implementing advanced monitoring and tracing (OpenTelemetry, DataDog) for production visibility and reliability",
 ]
-stack = ["PLACEHOLDER", "PLACEHOLDER"]
+stack = ["Scala 3", "Cats Effect", "Akka", "Kafka", "FS2", "Protobuf", "OpenTelemetry", "AWS (ECS, Lambda, S3)", "Terraform", "PostgreSQL", "http4s", "DataDog"]
 
-# --- Projects (optional) -----------------------------------------------------
+[[experience]]
+role = "Scala/Data Engineer"
+company = "Scalac"
+location = "Remote"
+start = "May 2019"
+end = "Mar 2023"
+highlights = [
+  "Healthcare backend (2021-2023): implemented a service for dynamic chat routing between client and healthcare insurance agents; refactored microservices to up-to-date Play/Play JSON libraries",
+  "Blockchain indexers for BTC, ETH and XTZ (2021): extended the ETH indexer to account for ERC-20 and ERC-721 token data",
+  "Automated data integration platform (2020-2021): extended the API and fixed production issues",
+  "Data Lake based on CDH 6.2.0 for a global company from the banking industry (2019-2020): Apache Hive and Hadoop, complex multi-stage Apache Spark jobs",
+]
+stack = ["Scala (Akka/Play, Typelevel)", "Python", "Apache Spark", "Apache Hive", "Hadoop", "PostgreSQL", "Kubernetes", "GCP", "Docker"]
 
-[[projects]]
-name = "PLACEHOLDER project"
-url = "https://github.com/your-handle/project"
-description = "PLACEHOLDER: one line on what it is and your part in it."
+[[experience]]
+role = "Machine Learning Specialist"
+company = "GetResponse"
+location = "Gdańsk"
+start = "Jan 2019"
+end = "Apr 2019"
+highlights = [
+  "Designed and developed a Machine Learning development environment based on Jupyterhub and MLflow",
+  "Designed and developed a ML models productization pipeline based on MLflow, Docker, GitlabCI and Kubernetes",
+  "Designed and productionized a fraud detection algorithm based on catboost library",
+  "Developed a topic modeling solution for customer chat clustering based on LDA algorithm",
+]
+stack = ["Python", "Scikit-Learn", "Keras", "catboost", "spacy", "gensim", "Docker", "Jupyterhub", "GitlabCI", "Kubernetes"]
+
+[[experience]]
+role = "Data Analytics Solutions Developer"
+company = "Intel Corporation"
+location = "Gdańsk"
+start = "Apr 2017"
+end = "Dec 2018"
+summary = "Developing a Big Data System for products validation in Intel Data Center Group."
+highlights = [
+  "Took part in a startup initiative in DCG to collect and analyze Intel IPs telemetry and performance using Big Data & Machine Learning tools",
+  "Was responsible for Cloudera EDH Big Data Cluster and Apache Kafka cluster management & benchmarking",
+  "Developed a custom Kafka producer in Golang with support of Confluent Schema Registry and Apache Avro",
+  "Developed a number of Apache Spark applications using Spark SQL and Structured Streaming APIs",
+]
+stack = ["Python", "Scala", "Go", "Cloudera EDH", "Apache Hadoop", "Apache Spark", "Apache Kafka", "Apache Oozie", "Docker", "Ansible"]
+
+[[experience]]
+role = "Firmware Engineer"
+company = "Intel Corporation"
+location = "Gdańsk"
+start = "Feb 2015"
+end = "Apr 2017"
+highlights = [
+  "Supporting development of Firmware for next-gen server platforms; took a role of build system product owner",
+  "Designed & implemented a data-driven solution that led to saving as much as 30 man-hours per week spent solely on FW compilation",
+]
+
+[[experience]]
+role = "Software Engineer Intern"
+company = "Intel Corporation"
+location = "Gdańsk"
+start = "Mar 2014"
+end = "Jan 2015"
+summary = "Developing firmware for Intel server platforms."
+
+[[experience]]
+role = "Software Engineer Intern"
+company = "Voicelab"
+location = "Gdańsk"
+start = "Oct 2012"
+end = "Feb 2014"
+summary = "Developing software for state-of-the-art automatic speech recognition system."
 
 # --- Education ---------------------------------------------------------------
 
 [[education]]
-degree = "PLACEHOLDER degree"
-institution = "PLACEHOLDER institution"
-start = "2015"
-end = "2019"
-notes = "PLACEHOLDER: optional note, or delete this line."
+degree = "Data Engineering - Data Science"
+institution = "Gdańsk University of Technology"
+start = "2016"
+end = "2017"
+
+[[education]]
+degree = "M.Sc., Control Engineering and Robotics"
+institution = "Gdańsk University of Technology"
+start = "2013"
+end = "2015"
+
+[[education]]
+degree = "B.Sc., Control Engineering and Robotics"
+institution = "Gdańsk University of Technology"
+start = "2009"
+end = "2013"
 
 # --- Extra sections (optional): talks, languages, certifications, ... --------
 
 [[extras]]
 title = "Languages"
-items = ["PLACEHOLDER language (level)", "PLACEHOLDER language (level)"]
+items = ["Polish (native), English (full professional), Spanish (limited working), French (limited working), Japanese (elementary)"]
+
+[[extras]]
+title = "Certifications"
+items = ["Machine Learning; Deep Learning (5-course specialization by deeplearning.ai on Coursera); Introduction to Data Science; Text Mining: Bag of Words; The Data Scientist's Toolbox"]

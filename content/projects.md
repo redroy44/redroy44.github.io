@@ -1,6 +1,6 @@
 +++
 title = "Projects"
-# PLACEHOLDER: one line introducing your open-source work.
-description = "PLACEHOLDER: one line about your open-source work."
+# Optional: add `description = "..."` for a line about your open-source work; it is shown
+# under the page title.
 template = "projects.html"
 +++
