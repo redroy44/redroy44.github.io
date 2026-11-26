@@ -1,15 +1,16 @@
 +++
 # The home page. The text below appears under your name; the post list and
 # contact links are added by templates/index.html.
-# The text was taken from the LinkedIn profile export; rewrite it freely.
 +++
 
-I'm a software engineer with more than ten years of production experience,
-from Big Data platforms and event-driven Scala services to AI agents in Rust.
-I build backend systems end to end, from design and code to deployment and
-monitoring.
-You can contact me if you have some interesting opportunities for remote
-projects.
+I build production AI agents in Rust: the agent loop, its tools and state,
+the MCP and A2A integrations around it, and the tracing that shows what it
+did. Before that I spent ten years on backend and data systems, from Big Data
+platforms at Intel to event-driven Scala services. I'm now adding Python AI
+engineering to the stack.
+
+I write here about what that takes in practice. If you are building agents
+and want help, get in touch.
 
 ## What I work on
 
