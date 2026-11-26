@@ -147,7 +147,7 @@ The repo includes five Claude Code skills in `.claude/skills/`, and `CLAUDE.md` 
 | `/blog-publish` | Run the pre-publish checklist, remove `draft = true` once you confirm, and draft the text for sharing the post |
 | `/retro` | End-of-session retrospective that turns lessons into edits to `CLAUDE.md`, the skills or the mise tasks; `/retro post <slug>` records how a published post did |
 
-Ideas are kept in `ideas/backlog.md`. This repository is public, so that file is git-ignored and stays on your machine; `ideas/README.md` describes its format. For the same reason, a draft post is readable on GitHub as soon as you push it, even though the site does not show it. Keep a draft unpushed if it should stay private.
+Ideas are kept in `ideas/backlog.md`, which is committed; `ideas/README.md` describes its format. This repository is public, so the backlog is readable by anyone. For the same reason, a draft post is readable on GitHub as soon as you push it, even though the site does not show it. Keep a draft unpushed if it should stay private.
 
 Each skill is one Markdown file. Edit it to change how it behaves.
 

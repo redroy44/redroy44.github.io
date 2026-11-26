@@ -5,7 +5,7 @@ theme, deployed to GitHub Pages (https://redroy44.github.io) from `master` by
 GitHub Actions. `README.md` is the full guide.
 
 This repository is public. Anything pushed is readable: drafts, commit
-messages, history. `ideas/backlog.md` is git-ignored for that reason. Do not
+messages, history, and the ideas backlog in `ideas/backlog.md`. Do not
 commit secrets or private details, and do not add the author's email address
 anywhere unless they ask.
 
