@@ -61,6 +61,11 @@ github_url = "https://github.com/redroy44"
 linkedin_url = "https://www.linkedin.com/in/piotr-bandurski/"
 email = ""
 
+# Umami Cloud analytics (cookie-free). The website ID from Umami's
+# Settings, Websites, Edit. Empty turns analytics off. The script is added
+# only by `zola build` and only counts visits on the base_url domain.
+umami_website_id = ""
+
 # A short role line shown under your name on the home page.
 role = "AI Engineer · Rust"
 location = "Wrocław, Poland"

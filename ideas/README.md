@@ -1,8 +1,8 @@
 # Post ideas (format)
 
-The backlog for blog posts is `ideas/backlog.md`. This repository is public, so
-that file is git-ignored: it stays on your machine and is never pushed. Back
-it up yourself if it matters.
+The backlog for blog posts is `ideas/backlog.md`. It is committed, and this
+repository is public, so anything written there is readable by anyone. Keep
+employer names, internal systems and private details out of it.
 
 Create it with the `/blog-ideas` skill or by hand, using the format below.
 One `##` block per idea.

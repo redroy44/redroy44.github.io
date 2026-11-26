@@ -6,8 +6,9 @@ argument-hint: "[idea text | list | next | mine <path or topic>]"
 
 # Blog ideas
 
-The backlog is `ideas/backlog.md`. It is git-ignored because this repository
-is public, so it may not exist yet: create it if missing, starting from the
+The backlog is `ideas/backlog.md`. It is committed and this repository is
+public, so write nothing there that should stay private: no employer names,
+internal systems or ticket numbers. Create it if missing, starting from the
 format in `ideas/README.md`. Read it before doing anything, and keep that
 format: one `##` block per idea. Never delete an idea; set `status: dropped` instead.
 

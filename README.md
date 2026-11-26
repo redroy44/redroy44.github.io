@@ -147,7 +147,7 @@ The repo includes five Claude Code skills in `.claude/skills/`, and `CLAUDE.md` 
 | `/blog-publish` | Run the pre-publish checklist, remove `draft = true` once you confirm, and draft the text for sharing the post |
 | `/retro` | End-of-session retrospective that turns lessons into edits to `CLAUDE.md`, the skills or the mise tasks; `/retro post <slug>` records how a published post did |
 
-Ideas are kept in `ideas/backlog.md`. This repository is public, so that file is git-ignored and stays on your machine; `ideas/README.md` describes its format. For the same reason, a draft post is readable on GitHub as soon as you push it, even though the site does not show it. Keep a draft unpushed if it should stay private.
+Ideas are kept in `ideas/backlog.md`, which is committed; `ideas/README.md` describes its format. This repository is public, so the backlog is readable by anyone. For the same reason, a draft post is readable on GitHub as soon as you push it, even though the site does not show it. Keep a draft unpushed if it should stay private.
 
 Each skill is one Markdown file. Edit it to change how it behaves.
 
@@ -227,6 +227,14 @@ static/
 - Syntax highlighting themes are set in `zola.toml` under `[markdown.highlighting]` (`github-light-default` and `github-dark-default`). Zola generates `giallo-light.css` and `giallo-dark.css` at build time.
 
 The templates use Tera v2 syntax (Zola 0.23). See [the Tera docs](https://keats.github.io/tera/). It differs from many older Zola themes you will find online, so do not paste their code in unchanged.
+
+## Analytics
+
+The site uses [Umami Cloud](https://umami.is/), which sets no cookies and collects no personal data, so it needs no consent banner. Set `umami_website_id` in `[extra]` in `zola.toml` to the ID from Umami (Settings, Websites, Edit). Leave it empty to turn analytics off.
+
+- The script is added only by `zola build`, so `mise run serve` and `mise run drafts` never count your own visits.
+- `data-domains` limits counting to the domain in `base_url`, so forks and local copies of the build are not counted either.
+- Readers who block trackers are not counted. Treat the numbers as trends and referrers, not exact visits.
 
 ## Deploying
 
