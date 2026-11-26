@@ -1,8 +1,7 @@
 +++
 title = "Coding agents that forget on purpose"
-description = "How I run several coding agents on real tickets: a brain session writes the spec, a dispatcher keeps the queue, and crews build and review. Every context gets cleared, so everything that matters lives in files."
+description = "How I run several coding agents on real tickets with Claude Code, Herdr and worktrunk, and why every decision goes into a file before the context is cleared."
 date = 2026-11-26
-draft = true
 
 [taxonomies]
 tags = ["ai-agents", "claude-code", "workflow"]

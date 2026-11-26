@@ -3,8 +3,8 @@
 Format and status values: see `ideas/README.md`. This file is public.
 
 ## Brain, dispatcher, crew: a multi-agent coding workflow that survives context clears
-- status: drafting
-- draft: content/blog/2026-11-26-coding-agents-that-forget/index.md
+- status: published
+- post: /blog/coding-agents-that-forget/
 - added: 2026-11-26
 - source: the author's claude-skills repo (brain, crew-dispatch, herdr-crew, ticket-groom, spec-review skills)
 - claim: (candidate, not confirmed) In a multi-agent coding setup, most of the design is about what survives a context clear: hand off through files (brief, spec, queue, inbox), not through an agent's memory.
