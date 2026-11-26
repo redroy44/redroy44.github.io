@@ -9,32 +9,34 @@ tags = ["ai-agents", "claude-code", "workflow"]
 +++
 
 Most days I have two crews of coding agents working on two tickets, and a
-third session helping me design the next one. None of them remembers
-anything from yesterday. Most of them do not even remember this morning.
+third Claude session where I design the next ticket. Each of these sessions
+gets its context cleared at some point, usually several times a day.
 
-That is the design. It took me a few weeks to get there, and the main lesson
-was simple: an agent's context is a scratchpad, not a place to keep
-decisions. If a decision matters, it goes into a file the moment it is made.
+It took me a few weeks to set this up so that clearing a context loses
+nothing. One rule made it work: when a decision is made, the agent writes it
+into a file right away. The context only holds the work in progress.
 
-The setup is a few Claude Code skills that run inside
-[Herdr](https://herdr.dev), a terminal workspace for agents, on top of git worktrees
-managed by [worktrunk](https://worktrunk.dev). This post follows one ticket through it.
+The setup is a few Claude Code skills. They run inside
+[Herdr](https://herdr.dev), a terminal workspace for agents, and use git
+worktrees managed by [worktrunk](https://worktrunk.dev). Below I follow one
+ticket from the start to the PR.
 
 <!-- more -->
 
-## One long session does not scale
+## Why one long session was not enough
 
-I started the way most people do. One Claude session per ticket: read the
-ticket, talk about the design, write the code, review it, fix it, open the
-PR. For small tickets this is fine.
+I started with one Claude session per ticket. In that session I read the
+ticket, discussed the design, and had the agent write the code, review it,
+fix it and open the PR. For small tickets this works.
 
-For a real ticket it falls apart in two ways. First, the context fills up
-with dead ends. By the time the agent writes code, it remembers the option
-we rejected as clearly as the one we chose, and sometimes it builds the wrong
-one. When the context gets compacted, the decision from an hour ago is gone.
-Second, I can only follow one session at a time. While it works, I wait.
+For bigger tickets I hit two problems. The context fills up with options we
+tried and dropped. When the agent starts coding, those rejected options are
+still in its context next to the chosen one, and now and then it implements
+the wrong one. After compaction, decisions from an hour earlier can be gone.
+The second problem is me: I can only follow one session at a time.
 
-So I split the work by role, and I made every role cheap to throw away.
+So I split the work into roles. Each role runs in its own session, and any
+session can be cleared or restarted without losing work.
 
 ## The shape
 
@@ -91,41 +93,41 @@ So I split the work by role, and I made every role cheap to throw away.
 <figcaption>One ticket, four roles. Only files cross the dashed line.</figcaption>
 </figure>
 
-Each box is a separate session, and each one has a short list of things it
-must not do. That list matters more than the list of things it does.
+Each box in the diagram is a separate session. Each role also has a list of
+things it must not do, and those limits keep the sessions apart.
 
 | Role | Does | Never does |
 | --- | --- | --- |
-| Brain | Checks one ticket against the code, argues the design with me, writes the spec | Write production code |
+| Brain | Checks one ticket against the code, discusses the design with me, writes the spec | Write production code |
 | Dispatcher | Keeps the queue, starts coordinators, collects questions for me | Design, run a crew, write code |
 | Coordinator | Runs one crew from the first commit to a green PR | Write code |
-| Crew | An implementer that writes the code, a reviewer that reads it | Push, merge, or post on GitHub |
+| Crew | An implementer writes the code, a reviewer reads it | Push, merge, or post on GitHub |
 
-## The brain: think, write it down, leave
+## The brain
 
-The brain gets one ticket. Its first step is boring and important: it moves
-into the ticket's worktree before it reads any code. If the worktree does not
-exist, it creates one with `wt switch --create`. A worktrunk hook copies
-`.env` and the build caches into it, so the crew does not start with a cold
-build. Whatever the brain writes from now on lands where the crew will look.
+The brain works on one ticket. Before it reads any code, it switches into the
+ticket's worktree. If there is no worktree yet, it creates one with
+`wt switch --create`. A worktrunk hook copies `.env` and the build caches
+into it, so the crew's first build is not a cold one. Everything the brain
+writes from then on is where the crew will look for it.
 
 Then it grooms the ticket. Many of our tickets are written with AI help, and
-they can be confidently wrong. The brain lists every claim in the ticket ("the
-tool returns X", "field Y is missing") and marks each one as true with a
-`file:line`, false with what the code really does, or not checked. A crew
-that starts from a wrong ticket builds the wrong thing very efficiently.
+some of their claims are wrong. The brain lists every claim in the ticket
+("the tool returns X", "field Y is missing") and marks it as true (with a
+`file:line`), false (with what the code actually does), or not checked. If a
+crew starts from a wrong claim, it will implement it.
 
-Next, it grills me on the design. This is the part I enjoy. Every time we
-settle something, the brain writes one line into the brief: the decision, the
-options we rejected, and why. It writes the line right away, not at the end,
-because the end is exactly when the context is fullest.
+Next, it grills me on the design. For each decision we make, the brain adds
+one line to the brief with the decision, the rejected options and the reason.
+It writes the line as soon as the decision is made. At the end of the
+session the context is at its fullest, so that is the worst time to write
+things down.
 
-The decisions then move into the spec. I use
-[OpenSpec](https://openspec.dev), so that means `proposal.md` and `design.md` in a
-change folder. The skill says it plainly: a decision that stays only in the
-brief or in the conversation is lost.
+Then the decisions go into the spec. I use [OpenSpec](https://openspec.dev),
+so that means `proposal.md` and `design.md` in a change folder. Anything that
+stays only in the brief or in the chat is lost when the context is cleared.
 
-The hand-off is a commit, a clean `git status`, and one entry in the queue:
+The hand-off is a commit, a clean `git status` and one entry in the queue:
 
 ```json
 {
@@ -138,29 +140,30 @@ The hand-off is a commit, a clean `git status`, and one entry in the queue:
 }
 ```
 
-The last thing the brain says is "You can clear this context." I do.
+At the end the brain tells me the ticket is ready and that I can clear the
+context, and I clear it.
 
-## The dispatcher: count my attention, not agents
+## The dispatcher
 
 The dispatcher reads the queue and starts one coordinator per ready ticket,
-up to a limit. The limit is 2, and the skill explains why in one line:
+up to a limit. The limit is 2. The skill gives the reason:
 
 > The limit counts the user's attention, not agents.
 
-Agents are cheap. I could start ten. But every crew needs me sooner or later:
-a design question, a failed check, a review comment. Ten crews means ten
-people tapping my shoulder. Two crews on one laptop also fight over ports,
-builds and containers.
+Starting more agents costs almost nothing. My time is what runs out. Every
+crew needs me at some point, for a design question, a failed check or a
+review comment, and with more than two crews I stop keeping up. Two crews on
+one laptop also already compete for ports and build caches.
 
-So "active" has a careful definition. A ticket is active when a crew is
-working on it, or when its PR is waiting for me: a failed check, a "changes
-requested" review, an open thread, an unanswered question. A PR that only
-waits for a teammate's approval is not active. That one rule keeps the queue
-moving while my colleagues take their time.
+So a ticket only counts as active when it needs a crew or me. It is active
+while a crew works on it, or when its PR waits for me: a failed check, a
+requested change, an open thread or an unanswered question. A PR that only
+waits for a colleague's approval does not count, so the next ticket can start
+in the meantime.
 
-The second job is questions. Coordinators do not ask me in their own tab.
-They write a small file and carry on with whatever does not depend on the
-answer:
+The dispatcher also handles questions. Coordinators do not ask me in their
+own tabs. They write the question to a file and continue with work that does
+not depend on the answer:
 
 ```json
 {
@@ -175,72 +178,73 @@ answer:
 }
 ```
 
-The dispatcher collects every inbox file into one dialog, with each
-coordinator's recommendation as the first option. I answer four questions
-from two tickets in a minute, instead of being pinged from four tabs. With
-`/loop 10m` the dispatcher does this on its own, and I come back to a short
-report.
+The dispatcher collects all inbox files and shows them in one dialog, with
+each coordinator's recommendation as the first option. I answer the questions
+of both tickets in one go. With `/loop 10m` the dispatcher repeats this every
+ten minutes and gives me a short report.
 
 ## The coordinator and its crew
 
-The coordinator is the only session that touches the crew. It starts two
+The coordinator is the only session that talks to the crew. It starts two
 [opencode](https://opencode.ai) agents in Herdr panes:
 
-- an **implementer** on a Claude Opus model, which works through the tasks
-  with tests and commits locally;
-- a **reviewer** on a GPT model in read-only mode, which reviews
-  `main...HEAD` as if it were the last gate before merge.
+- An implementer on a Claude Opus model. It works through the tasks with
+  tests and commits locally.
+- A reviewer on a GPT model in read-only mode. It reviews `main...HEAD` as
+  the last check before merge.
 
-The reviewer comes from a different vendor on purpose. Two models from one
-family tend to agree with each other.
+Review runs in rounds until a round has no findings. The coordinator checks
+every finding in the code before it sends it to the implementer, because
+reviewers often rate findings too high. For example, a "cross-tenant, high"
+finding that only works if the victim sends a malformed token is low in
+practice. After three rounds the coordinator stops and asks me what to do. By
+then the fixes usually cause new findings.
 
-Review runs in rounds until a round finds nothing. The coordinator checks
-every finding in the code before it passes it on, because reviewers like to
-overstate reach: a "cross-tenant High" that needs the victim to send a
-malformed token is not high. After three rounds the coordinator stops and asks
-me what is going on. By then fixes are usually creating new findings.
+The coordinator's context gets cleared too. It keeps a short work state with
+fixed keys, such as `phase` and `next`, and a new coordinator session starts
+from there.
 
-The coordinator forgets too. It keeps a short work state with fixed keys,
-`phase` and `next` among them, and a fresh coordinator session continues
-from there. Same idea again: the context is disposable, the file is not.
+The level in the queue entry sets how much the coordinator decides alone. At
+level 1 it asks me about everything. At level 2 it fixes verified high and
+medium findings without asking. At level 3 it can also open a draft PR. At
+every level it asks before a scope change, a merge, a force-push or a comment
+on GitHub.
 
-How much the coordinator decides alone depends on the level in the queue
-entry. At level 1 it asks me about everything. At level 2 it fixes verified
-high and medium findings without asking. At level 3 it can open a draft PR.
-At every level it asks before a scope change, a merge, a force-push or a
-comment on GitHub.
+## Problems I ran into
 
-## Sharp edges
+Herdr does not detect the state of opencode. It showed the agent as idle
+while it was working, and never as blocked. I wrote a small script that polls
+the session's last update time instead. It prints `DONE` when the turn ends
+and `STUCK` after five minutes without a change. So far `STUCK` has almost
+always meant a permission prompt.
 
-None of this worked the first time. A few things I had to learn:
+Our local start script runs `kill -9` on whatever holds its ports, and one of
+them was held by Docker Desktop. Now the coordinator checks `lsof` and
+`docker ps` before the first server start.
 
-- **Herdr could not see opencode's state.** It showed the agent as idle while
-  it was working, and never as blocked. I wrote a small poll script that
-  watches the session's last update time instead. It prints `DONE` when the
-  turn ends, or `STUCK` after five quiet minutes. `STUCK` is nearly always a
-  permission prompt.
-- **A start script killed Docker.** Our local start script runs `kill -9` on
-  whatever holds its ports, and Docker Desktop was holding one. Now the
-  coordinator checks `lsof` and `docker ps` before the first server run.
-- **Two implementers share one git index.** A plain `git add` and
-  `git commit` can sweep up the other agent's staged files. With more than one
-  implementer, each commits with a pathspec: `git commit -m "…" -- <paths>`.
-- **Panes leak secrets.** Start scripts print live tokens, and agents read
-  pane output. The implement prompt asks for redacted reads, and if a token
-  leaks anyway, that session ends.
+When two implementers work in one worktree, they share one git index. A plain
+`git add` and `git commit` from one of them can include files the other one
+staged. So each implementer commits with a pathspec:
+`git commit -m "…" -- <paths>`.
 
-## Closing the loop
+Start scripts print live tokens, and the agents read pane output. The
+implement prompt asks agents to redact tokens when they quote it. If a token
+leaks anyway, I end that session.
 
-After every merge, a retro skill sorts the review findings into classes by
-cause, such as "test does not prove its name", and adds one line to a log. A
-new rule for the prompts is proposed only when a class keeps coming back.
-After four PRs the numbers are not good yet: the last one took five crew
-rounds. One class appeared twice with no rule, then six times, and only then
-got one. That is a post for later, when I have enough PRs to say whether the
-loop works.
+## The retro
 
-## If you copy one thing
+After each merge, a retro skill sorts the review findings by cause, for
+example "test does not prove its name", and adds one line to a log. It
+proposes a new prompt rule only when a class keeps coming back. After four
+PRs the numbers do not show an improvement yet. The latest PR took five crew
+rounds, and one class appeared twice without getting a rule, then six times
+before it got one. I will write about this once I have enough PRs to see
+whether it helps.
 
-Write decisions into files at the moment they are made, and build every
-session so you can kill it. Once that holds, clearing a context stops being
-a loss. It becomes the cheapest way to get a focused agent back.
+## Where to start
+
+If you want to try something like this, start with the hand-off. Let one
+session write its decisions and a spec into the repo, clear its context, and
+start a second session from those files only. If the second session can do
+the work without asking what was decided, you can add the other roles one at
+a time.
