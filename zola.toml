@@ -10,7 +10,7 @@ title = "Piotr Bandurski"
 
 # One sentence saying what you do. Used as the default meta description and in
 # link previews, so write it for someone who has ten seconds.
-description = "AI Engineer with a broad knowledge spanning the whole modern data stack, from Big Data systems to Deep Learning solutions."
+description = "Software engineer in Wrocław building production AI agents in Rust: agent backends, MCP and A2A, multi-agent orchestration and observability."
 
 default_language = "en"
 
@@ -62,14 +62,14 @@ linkedin_url = "https://www.linkedin.com/in/piotr-bandurski/"
 email = ""
 
 # A short role line shown under your name on the home page.
-role = "AI Engineer"
+role = "AI Engineer · Rust"
 location = "Wrocław, Poland"
 
 # The box at the end of every post. `author_bio` is one or two
 # sentences on what you do. `author_cta` is an optional line saying what you
 # are open to (hiring, consulting, talks); leave it empty to hide it.
-author_bio = "A passionate computer science engineer with a broad knowledge spanning the whole modern data stack - from Big Data systems to Deep Learning solutions."
-author_cta = "You can contact me if you have some interesting opportunities for remote projects."
+author_bio = "Software engineer building production AI agents in Rust: agent backends, MCP and A2A integrations, multi-agent orchestration and the observability around them. Ten years of backend and data engineering before that, now adding Python AI engineering."
+author_cta = "Open to remote work on AI agents and Rust backends. Reach me on LinkedIn."
 
 # How many posts the home page lists.
 home_post_count = 5

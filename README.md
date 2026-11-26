@@ -40,7 +40,6 @@ The site text was filled in from the old site and a LinkedIn profile export, so 
 - [ ] `data/projects.toml`: see [Projects](#projects). It lists two old projects; add current work.
 - [ ] `static/img/og-default.png`: the fallback link-preview image, 1200x630 PNG. It is only used when the generated images are missing.
 - [ ] `static/favicon.svg`
-- [ ] Delete `content/blog/2026-01-01-styling-sample.md` and `static/img/sample-diagram.svg` once you have checked the styling. The sample post is a draft, so it is not published; see it with `mise run drafts`.
 
 ## Writing a post
 
