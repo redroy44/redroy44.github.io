@@ -228,6 +228,14 @@ static/
 
 The templates use Tera v2 syntax (Zola 0.23). See [the Tera docs](https://keats.github.io/tera/). It differs from many older Zola themes you will find online, so do not paste their code in unchanged.
 
+## Analytics
+
+The site uses [Umami Cloud](https://umami.is/), which sets no cookies and collects no personal data, so it needs no consent banner. Set `umami_website_id` in `[extra]` in `zola.toml` to the ID from Umami (Settings, Websites, Edit). Leave it empty to turn analytics off.
+
+- The script is added only by `zola build`, so `mise run serve` and `mise run drafts` never count your own visits.
+- `data-domains` limits counting to the domain in `base_url`, so forks and local copies of the build are not counted either.
+- Readers who block trackers are not counted. Treat the numbers as trends and referrers, not exact visits.
+
 ## Deploying
 
 The workflow `.github/workflows/deploy.yml` runs on every pull request and every push. It checks links, generates the link-preview images, builds the site and validates the HTML. On `master` it then deploys to GitHub Pages.

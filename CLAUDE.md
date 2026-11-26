@@ -28,7 +28,8 @@ anywhere unless they ask.
 - The only script is `static/js/site.js` (theme switch, copy buttons) plus a
   few lines in `<head>` that apply a stored theme. Every page must keep
   working without JavaScript. No frameworks and no third-party requests
-  unless the author asks.
+  unless the author asks. The one allowed exception is Umami Cloud
+  analytics (`umami_website_id` in `zola.toml`), loaded only in build output.
 - Dark theme tokens appear twice in `static/css/style.css` (system dark, and
   the manual switch). Change both.
 - CI fails on broken internal links (`zola check`) and invalid HTML
