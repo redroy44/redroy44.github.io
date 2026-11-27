@@ -178,7 +178,7 @@ No config mentions it, so the next `mise prune` cleans it up.
 
 ## Was it worth it
 
-For me, yes. I can read my config, and when something breaks the error is about my config. Adding a tool is one line. Changing a dotfile doesn't need a rebuild. No nix daemon, no `/nix` volume, no build users. And the learning curve is a lot flatter. I had it working in a morning, after almost four years of not really understanding my nix setup.
+For me, yes. I can read my config, and when something breaks the error is about my config. Adding a tool is one line. Changing a dotfile doesn't need a rebuild. No nix daemon, no `/nix` volume, no build users. And the learning curve is a lot flatter. I had it working in a morning, after almost four years in which I only ever understood the basics of my nix setup.
 
 What I gave up is mostly generations. There's no previous system to boot back into. Rollback is git and `mise install` now. And as I said, only the tools are locked, so a fresh install won't give me exactly the same machine. For one laptop I can live with that.
 
@@ -186,4 +186,4 @@ Casks still belong to Homebrew, so `brew upgrade --cask` is on me. nix-darwin us
 
 mise has rough edges too. Besides the `mas` thing, `mise lock --global` wrote a second lockfile when I ran it from my home directory, and then preferred that one. For a while I had two versions of atuin depending on which directory I was in. Also set `lockfile_platforms = ["macos-arm64"]`, or your lockfile fills up with Linux and Windows builds. The setting doesn't clean up what's already there, so run `mise lock --global --upgrade` after it. Mine went from 4,534 lines to 1,615.
 
-If you have one Mac and you're tired of fixing your flake, give it a try. Get mise to describe your machine first, take nix out a layer at a time, and keep the way back until the end. My config is in [redroy44/dotfiles](https://github.com/redroy44/dotfiles) if you want to steal from it.
+If you have one Mac and you're tired of fixing your flake, give it a try. Get mise to describe your machine first, take nix out a layer at a time, and keep the way back until the end. My config is in [redroy44/dotfiles](https://github.com/redroy44/dotfiles) if you want a starting point.
