@@ -95,9 +95,11 @@ open their branch in a new worktree, build it, run it and read the code there.
 My own work and my agents keep going in the other directories. When I'm done,
 I remove the worktree.
 
-PLACEHOLDER: one or two sentences on how this changed reviews for you, for
-example how quickly you now pick up review requests, or that you run the
-branch instead of only reading the diff.
+The same works for agents. A review agent gets its own worktree with the
+branch checked out, so it can do more than read the diff. It builds the code,
+starts the local server, and tests the change against it, while the agents
+writing code carry on in their own worktrees. My reviews and theirs now both
+start from a running branch.
 
 ## The catch: ignored files
 
@@ -207,8 +209,9 @@ worktrees with kache.
 - The stash is shared. A `git stash` in one worktree shows up in
   `git stash list` in all of them.
 - Two worktrees running the same dev server or Docker Compose project will
-  fight over ports and container names. Give each one its own, or run only
-  one at a time.
+  fight over ports and container names. This matters more once agents start
+  servers to test their changes. Give each worktree its own port; worktrunk
+  hooks can derive one from the branch name with `{{ branch | hash_port }}`.
 - Old worktrees pile up. Remove them when the branch is merged, and run
   `git worktree prune` if you deleted a directory by hand.
 
