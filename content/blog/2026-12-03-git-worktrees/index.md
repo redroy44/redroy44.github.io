@@ -91,9 +91,20 @@ Every ticket there gets its own worktree.
 ## Reviewing without blocking
 
 The part I use most often is reviewing. When a colleague asks for a review, I
-open their branch in a new worktree, build it, run it and read the code there.
-My own work and my agents keep going in the other directories. When I'm done,
-I remove the worktree.
+open their PR in a new worktree, build it, run it and read the code there. My
+own work and my agents keep going in the other directories.
+
+I check out the PR head detached, so the review doesn't leave a local branch
+behind:
+
+```bash
+git fetch origin pull/87/head
+git worktree add --detach ../myapp.pr-87 FETCH_HEAD
+```
+
+The worktree stays for all review rounds. After the next push I fetch again
+and run `git -C ../myapp.pr-87 checkout --detach FETCH_HEAD`. When I
+approve, I remove it.
 
 The same works for agents. A review agent gets its own worktree with the
 branch checked out, so it can do more than read the diff. It builds the code,
@@ -131,15 +142,17 @@ wt list                        # all worktrees and their state
 wt remove                      # remove this worktree, delete the branch if merged
 ```
 
-`wt switch pr:87` is the review flow from above in one command. It looks up
-the PR's branch, creates the worktree and moves me into it.
-
-PLACEHOLDER: check this is how you open a colleague's branch, or replace it
-with what you actually run.
+`wt switch pr:87` does the review setup in one command. It finds the PR's
+branch, creates the worktree and moves you into it. For a PR from a fork it
+fetches the PR ref and sets the push remote to the fork. I still use the
+detached `git worktree add` from above for reviews, because it leaves no
+branch behind. For my own work I use `wt switch` with no argument, which
+opens a picker.
 
 ## Hooks that copy ignored files
 
-worktrunk has a built-in command for the ignored-files problem,
+worktrunk (version 0.83 when I wrote this) has a built-in command for the
+ignored-files problem,
 `wt step copy-ignored`. It copies gitignored files from the main worktree into
 the current one. Run from a hook, it fills every new worktree automatically.
 
@@ -165,9 +178,6 @@ it is ignored and matches a pattern:
 target/
 ```
 
-PLACEHOLDER: replace with the patterns you use, and the repositories you use
-them on (no employer names).
-
 When a later step depends on the copy, a hook can be a pipeline: `[[post-start]]`
 blocks run in order.
 
@@ -184,6 +194,44 @@ Project hooks run commands from the repository, so worktrunk asks you to
 approve them the first time, and again whenever a command changes. Hooks you
 want in every repository go in `~/.config/worktrunk/config.toml` instead.
 
+That is what I do. I have no `.config/wt.toml` and no `.worktreeinclude` in
+any repository. There is one hook in my user config, and it copies everything
+ignored into every new worktree:
+
+```toml
+# ~/.config/worktrunk/config.toml
+[post-start]
+copy = "wt step copy-ignored"
+```
+
+## Don't copy a Python virtualenv
+
+Copying everything has one trap. A `.venv/` has absolute paths inside it: the
+scripts in `.venv/bin` and editable installs point at the directory the venv
+was made in. A copied venv in a new worktree can import code from the main
+checkout, so the tests run the wrong code and nothing tells you. The worktrunk
+docs say the same and recommend `uv sync` instead, which is fast enough.
+
+So exclude it, and let a hook create a fresh one:
+
+```toml
+# ~/.config/worktrunk/config.toml
+[step.copy-ignored]
+exclude = [".venv/"]
+```
+
+```toml
+# .config/wt.toml in a Python project
+[[post-start]]
+copy = "wt step copy-ignored"
+
+[[post-start]]
+deps = "uv sync"
+```
+
+The same care applies to `node_modules/` when it has native modules built for
+one path.
+
 ## Copying `target/` without filling the disk
 
 On filesystems with copy-on-write, `copy-ignored` uses reflinks: the copy
@@ -196,11 +244,37 @@ about 68 seconds to about 3.
 On ext4 there are no reflinks, so every file is copied in full. With several
 Rust worktrees that adds up fast.
 
-PLACEHOLDER: your own numbers: the filesystem you're on, first build time in
-a new worktree with and without the copy, and disk use.
+On my Mac (APFS), in a repository with a Rust server and two Node packages,
+`.env` is in the new worktree about 3 seconds after `wt switch --create`.
+The `node_modules/` folders and `target/` follow in the background, and
+everything is there in about two and a half minutes. The `target/` in my main
+checkout of that repository is 8.7 GB. Reflinks mean the copies don't cost
+another 8.7 GB each, but a reflinked file stops sharing blocks once a build
+rewrites it, so the disk use grows with every build in every worktree.
 
-How I dealt with that is the next post: sharing one Rust build cache across all
-worktrees with kache.
+I measured it on [rig](https://github.com/0xPlaygrounds/rig), the Rust LLM
+framework I build agents with: a debug `cargo build -p rig-core` (rig-core 0.47.1,
+rustc 1.100.0, M1 Pro, 32 GB, no compiler cache, times as cargo reports them).
+
+| Build                               | Time | Extra disk |
+| ----------------------------------- | ---- | ---------- |
+| First build in the main checkout    | 53 s | 511 MB     |
+| New worktree, empty `target/`       | 77 s | 511 MB     |
+| New worktree after `copy-ignored`   | 37 s | ~0         |
+
+The copy took 2 seconds for 1048 files and reported "reflinked, no extra
+disk". After it, cargo compiled only the two crates of the rig workspace,
+because their paths changed. Every dependency came from the copy. Rebuilding
+just those two crates in the main checkout takes 24 seconds, so that is the
+floor for this repository. The gap is smaller than the worktrunk docs show,
+because rig-core alone is a large part of the build. These are single runs on
+a busy laptop, so read them as a rough size, not a benchmark. The first two
+rows do the same work; the difference between them is that noise.
+
+There is another way to share Rust build output: a compiler cache that sits in
+front of `rustc` and is shared by all worktrees. I use
+[kache](https://github.com/kunobi-ninja/kache) for that, and it is the next
+post.
 
 ## Things to watch out for
 
@@ -208,16 +282,29 @@ worktrees with kache.
   check out `main` in a second one.
 - The stash is shared. A `git stash` in one worktree shows up in
   `git stash list` in all of them.
+- Copied dependencies come from the main checkout, not from the branch. If
+  the branch changes `package-lock.json` or `Cargo.lock`, the copied
+  `node_modules/` or `target/` is for the wrong versions. I had a branch
+  that needed a newer version of an internal UI package, and its tests failed
+  against the old copy until I reinstalled. Run the install step after the
+  copy when the lockfile differs.
 - Two worktrees running the same dev server or Docker Compose project will
   fight over ports and container names. This matters more once agents start
-  servers to test their changes. Give each worktree its own port; worktrunk
+  servers to test their changes. Give each worktree its own ports; worktrunk
   hooks can derive one from the branch name with `{{ branch | hash_port }}`.
+  A server with two ports needs both to move: I once moved the main port and
+  the agent's server still failed, on the console port of the main checkout.
+- Containers outlive their worktree. A compose file with a fixed
+  `container_name` fails in every other worktree while a stopped container
+  with that name exists, even one from a worktree that is already gone. Run
+  `docker compose down` before `wt remove`, for example in a `pre-remove`
+  hook.
 - Old worktrees pile up. Remove them when the branch is merged, and run
   `git worktree prune` if you deleted a directory by hand.
 
 ## Where to start
 
 Next time someone asks you for a review, don't stash. Run
-`git worktree add ../review origin/their-branch`, review it there, and remove
-it when you're done. If you start doing that every day, install worktrunk and
+`git worktree add --detach ../review origin/their-branch`, review it there, and
+remove it when you're done. If you start doing that every day, install worktrunk and
 add the `copy-ignored` hook.

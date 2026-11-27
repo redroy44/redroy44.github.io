@@ -29,7 +29,7 @@ Format and status values: see `ideas/README.md`. This file is public.
 - claim: With agents doing the typing, the limit is how many branches you can have open at once. Worktrees remove that limit, and worktrunk's copy-ignored hook makes each new checkout usable right away.
 - reader: engineers who know git branches but haven't used worktrees, especially ones starting to run coding agents
 - evidence: plain git worktree commands; wt switch pr:N for reviews; .config/wt.toml with `wt step copy-ignored` in post-start; .worktreeinclude; reflink numbers from the worktrunk docs (to be replaced or backed by the author's own)
-- notes: Release planned for the week of 2026-12-01. Draft has PLACEHOLDERs for the author's review flow, patterns and numbers. Followed by the kache post below.
+- notes: Release planned for the week of 2026-12-01. No PLACEHOLDERs left. Build numbers measured on rig-core 0.47.1 (single runs, busy laptop). Review flow, hook setup, copy timings and traps now come from the author's own sessions (employer names stripped). Followed by the kache post below.
 
 ## Many Rust worktrees, one build cache: kache
 - status: raw
