@@ -20,3 +20,22 @@ Format and status values: see `ideas/README.md`. This file is public.
 - reader: same as above, plus anyone tuning agent prompts or skills by hand
 - evidence: RETRO.md so far has 4 PRs (rounds 2+1, 2+6, 1+2, 5+1). Not yet enough: rounds have not gone down. "Stale async continuation after reset" appeared x2 with no rule, then x6, and only then got a rule, which suggests the threshold for adding a rule was too slow.
 - notes: Wait for 10-15 merged PRs. Then check whether classes stop recurring after their rule lands and whether rounds per PR fall. A negative result is still a post. Same stripping rules as above: ticket and PR numbers become "PR 1, PR 2…", no repo names.
+
+## Speeding up your work with git worktrees
+- status: drafting
+- post: content/blog/2026-12-03-git-worktrees/index.md
+- added: 2026-11-27
+- source: the author's daily workflow: parallel agent tasks and reviewing colleagues' branches, with worktrunk
+- claim: With agents doing the typing, the limit is how many branches you can have open at once. Worktrees remove that limit, and worktrunk's copy-ignored hook makes each new checkout usable right away.
+- reader: engineers who know git branches but haven't used worktrees, especially ones starting to run coding agents
+- evidence: plain git worktree commands; wt switch pr:N for reviews; .config/wt.toml with `wt step copy-ignored` in post-start; .worktreeinclude; reflink numbers from the worktrunk docs (to be replaced or backed by the author's own)
+- notes: Release planned for the week of 2026-12-01. Draft has PLACEHOLDERs for the author's review flow, patterns and numbers. Followed by the kache post below.
+
+## Many Rust worktrees, one build cache: kache
+- status: raw
+- added: 2026-11-27
+- source: the author's fix for slow Rust builds across many worktrees
+- claim: (candidate, not confirmed) Copying target/ into every worktree is slow and fills the disk without reflinks; a shared content-addressed cache (kache) makes a fresh worktree's first build fast without the copies.
+- reader: Rust developers using worktrees, readers of the worktrees post
+- evidence: kache (github.com/kunobi-ninja/kache); before and after build times and disk use from the author's machine
+- notes: Short follow-up to the worktrees post, which ends by pointing here. Need the author's setup and numbers.
