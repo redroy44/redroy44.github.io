@@ -20,3 +20,14 @@ Format and status values: see `ideas/README.md`. This file is public.
 - reader: same as above, plus anyone tuning agent prompts or skills by hand
 - evidence: RETRO.md so far has 4 PRs (rounds 2+1, 2+6, 1+2, 5+1). Not yet enough: rounds have not gone down. "Stale async continuation after reset" appeared x2 with no rule, then x6, and only then got a rule, which suggests the threshold for adding a rule was too slow.
 - notes: Wait for 10-15 merged PRs. Then check whether classes stop recurring after their rule lands and whether rounds per PR fall. A negative result is still a post. Same stripping rules as above: ticket and PR numbers become "PR 1, PR 2…", no repo names.
+
+## Leaving nix-darwin for mise without breaking my Mac
+- status: drafting
+- post: content/blog/2026-11-27-leaving-nix-darwin-for-mise.md
+- added: 2026-11-27
+- source: the author's dotfiles repo: migration of one Mac from nix-darwin + home-manager to mise, Sep 2026 (HANDOFF.md, git log)
+- claim: For a personal Mac, mise can replace nix-darwin: one readable mise.toml instead of a flake that breaks on updates, and you can switch in phases without losing the rollback path.
+- reader: (proposed, not confirmed) a nix-darwin user tired of fixing the config after nix updates, who knows mise only as a version manager like asdf
+- evidence: direnv workaround in the last nix commit (doCheck = false, fish test SIGKILLed in the build sandbox); a second machine's flake stopped evaluating after nix-darwin changed three options, error only said "open an issue"; five phases in the git log; dress rehearsal with a byte-identical store hash; traps: mas ordering silent skip, root-owned settings, sudo_local nix-store symlink, lockfile cwd trap
+- takeaway: (proposed, not confirmed) move your own setup in phases and know the traps before you start
+- notes: outline agreed 2026-11-27. Top 4 traps only. Claude Code angle = one paragraph. Leave out the machines still on nix.
